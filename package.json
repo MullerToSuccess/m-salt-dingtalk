@@ -1,0 +1,24 @@
+{
+  "name": "demo1",
+  "author": "admin",
+  "version": "1.0.0",
+  "description": "An awesome project",
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "scripts": {
+    "start": "nowa server",
+    "build": "nowa build"
+  },
+  "homepage": "",
+  "license": "MIT",
+  "dependencies": {
+    "classnames": "~2.1.2",
+    "natty-fetch": "~2.4.2",
+    "natty-storage": "~2.0.2",
+    "refast": "~1.2.3",
+    "saltui": "^3.1.17",
+    "url-loader": "^0.6.2"
+  }
+}
