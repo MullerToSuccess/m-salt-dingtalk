@@ -15,6 +15,8 @@
   "license": "MIT",
   "dependencies": {
     "classnames": "~2.1.2",
+    "echarts": "^3.8.5",
+    "echarts-for-react": "^2.0.0",
     "natty-fetch": "~2.4.2",
     "natty-storage": "~2.0.2",
     "refast": "~1.2.3",
