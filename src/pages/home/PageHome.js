@@ -1,9 +1,10 @@
 import { Component } from 'react';
-
+// import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 //引入echarts和react-fot-react:
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 
+import { render, Link } from 'react-dom';
 import Toast from 'saltui/lib/Toast';
 import Button from 'saltui/lib/Button';
 // import TabBar from 'saltui/lib/TabBar';
@@ -11,8 +12,9 @@ import { Group, PasswordInput, TabBar, Table} from 'saltui';
 import { Mask } from 'saltui';
 import Time from 'salt-icon/lib/Time';
 import Plus from 'salt-icon/lib/Plus';
-
+// import PageDemo from 'pages/demo';
 import './PageHome.less';
+// const customHistory = hashHistory;
 // import  tabImg1 from '/src/images/tab bar icon_touruchanchu_active.png';
 // import  tabImg2 from '/src/images/tab bar icon_touruchanchu_active.png';
 // import  tabImg3 from '/src/images/tab bar icon_touruchanchu_active.png';
@@ -20,15 +22,22 @@ import './PageHome.less';
 // import  tabImg5 from '/src/images/tab bar icon_touruchanchu_active';
 export default class PageHome extends Component {
 
-  constructor(props) {
-    super(props);
+  // componentWillMount(){
+  //   alert('will mount')
+  // }
+  // componentDidMount(){
+  //   alert('have mount')
+  // }
+  constructor(props,context) {
+    super(props,context);
+    this.context.router;
     this.TabBarItems = [
       {
         title: '排行榜',
         // icon: <Time />,
         icon: '/src/images/tab bar icon_paihangbang_normal.png',
         activeIcon:'/src/images/tab bar icon_paihangbang_active.png',
-        path: '/star',
+        path: '/home',
       },
       {
         title: '财务',
@@ -36,18 +45,18 @@ export default class PageHome extends Component {
         activeIcon:'/src/images/tab bar icon_caiwu_active.png',
         badge: 'new',
         badgeStyle: { right: -5 },
-        path: '/a/star',
+        path: '/finance',
       },
       {
         title: '投入产出',
         icon: '/src/images/tab bar icon_touruchanchu_normal.png',
         activeIcon:'/src/images/tab bar icon_touruchanchu_active.png',
-        path: '/a/star',
+        path: '/inoutput',
       },
       { title: '实力线', 
       icon: '/src/images/tab bar icon_shilixian_normal.png',
       activeIcon:'/src/images/tab bar icon_shilixian_active.png',
-       path: '/b/star' },
+       path: '/strengthLine' },
       { title: '更多', 
       icon: '/src/images/tab bar icon_more_normal.png',
       activeIcon:'/src/images/tab bar icon_more_active.png',
@@ -153,37 +162,104 @@ export default class PageHome extends Component {
   handleClick(options) {
     Toast.show(options);
   }
+  onChartReadyCallback(){
+    // alert('坲克');
+    console.log('chart is ready.');
+  }
   render() {
     const t = this;
-    const onChange = (activeIndex) => {
+    const onChange = (activeIndex, path) => {
       // 这里是触发每个item之后的回调，会返回当前点击的item的index 值
-      console.log(activeIndex);
+      t.context.router.push(path);
       if(activeIndex == 4){
         //如果是更多的Tab显示遮罩层
         t.showMask();
       }
     };
+    let option = {
+      title:{
+        text: '排行榜',
+        x:'center'
+      },
+      tooltip : {
+          trigger: 'axis'
+      },
+      legend: {
+          data:['最高气温','最低气温']
+      },
+      calculable : true,
+      xAxis : [
+          {
+              type : 'category',
+              boundaryGap : false,
+              data : ['周一','周二','周三','周四','周五','周六','周日']
+          }
+      ],
+      yAxis : [
+          {
+              type : 'value',
+              axisLabel : {
+                  formatter: '{value} °C'
+              }
+          }
+      ],
+      series : [
+          {
+              name:'最高气温',
+              type:'line',
+              data:[11, 11, 15, 13, 12, 13, 10],
+              markPoint : {
+                  data : [
+                      {type : 'max', name: '最大值'},
+                      {type : 'min', name: '最小值'}
+                  ]
+              },
+              markLine : {
+                  data : [
+                      {type : 'average', name: '平均值'}
+                  ]
+              }
+          },
+          {
+              name:'最低气温',
+              type:'line',
+              data:[1, -2, 2, 5, 3, 2, 0],
+              markPoint : {
+                  data : [
+                      {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
+                  ]
+              },
+              markLine : {
+                  data : [
+                      {type : 'average', name : '平均值'}
+                  ]
+              }
+          }
+      ]
+  };
+                      
     return(
+      
             <div className="page-home">
-            
-            <ReactEcharts
-            // option={{}}
-            // style={{height: '300px'}}
-            // theme={"theme_name"}
-            // onChartReady={this.onChartReadyCallback}
-            // onEvents={EventsDict} />
-            //    <Mask visible={t.state.maskvisible}
-            //     onWillHide={t.handleWillHide.bind(t)}
-            //     onDidHide={t.handleDidHide.bind(t)}
-            //     opacity={0.4}
-            //   />
+               <Mask visible={t.state.maskvisible}
+                onWillHide={t.handleWillHide.bind(t)}
+                onDidHide={t.handleDidHide.bind(t)}
+                opacity={0.4}
+              />
+              
               <div className="page-graph">
-                表图显示
                 <div style={{padding:'10px'}}>
-                <Button style={{borderRadius:0,width:90,display:'inline-block'}} onClick={this.handleClick}>订单</Button>
-                <Button style={{borderRadius:0,width:90,display:'inline-block'}} onClick={this.handleClick}>公司</Button> 
-                <Button style={{borderRadius:0,width:90,display:'inline-block'}} onClick={this.handleClick}>2017.11</Button> 
+                <Button className="page-button"  onClick={this.handleClick}>订单</Button>
+                <Button className="page-button"  onClick={this.handleClick}>公司</Button> 
+                <Button className="page-button"  onClick={this.handleClick}>2017.11</Button> 
                 </div>
+                <ReactEcharts className="page-echart"
+                echarts={echarts}
+                option={option}
+                style={{height: '300px'}}
+                lazyUpdate={true}
+                onChartReady={this.onChartReadyCallback}
+                />
               </div>
               
               <div>
@@ -205,5 +281,8 @@ export default class PageHome extends Component {
             </div>
           );
   }
+}
+PageHome.contextTypes = {
+  router: Object
 }
 

@@ -2,7 +2,7 @@ import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 import Refast, { LogicRender } from 'refast';
 import { Component } from 'react';
 import ReactEcharts from 'echarts-for-react';
-import { render } from 'react-dom';
+import { render, Link } from 'react-dom';
 import FastClick from 'fastclick';
 import Toast from 'saltui/lib/Toast';
 import Dialog from 'saltui/lib/Dialog';
@@ -10,7 +10,10 @@ import Dialog from 'saltui/lib/Dialog';
 import { isDev } from 'variables';
 import PageHome from 'pages/home';
 import PageDemo from 'pages/demo';
-// import ChartMsg from 'pages/Chart';
+import ChartMsg from 'pages/Chart';
+import PageFinance from 'pages/finance';
+import PageInoutput from 'pages/inoutput';
+import PageStrengthline from 'pages/strengthline';
 import DB from 'db';
 import './app.less';
 
@@ -55,9 +58,11 @@ class App extends Component {
 render(
   <Router history={customHistory}>
     <Route name="app" path="/" component={App}>
-      <IndexRoute component={PageHome} />
+      <IndexRoute component={PageDemo} />
       <Route path="home" component={PageHome} />
-      <Route path="demo" component={PageDemo} />
+      <Route path="finance" component={PageFinance} />
+      <Route path="inoutput" component={PageInoutput} />
+      <Route path="strengthLine" component={PageStrengthline} />
     </Route>
   </Router>,
   document.getElementById('App'),
