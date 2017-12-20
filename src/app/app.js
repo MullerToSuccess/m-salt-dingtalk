@@ -8,6 +8,7 @@ import Toast from 'saltui/lib/Toast';
 import Dialog from 'saltui/lib/Dialog';
 
 import { isDev } from 'variables';
+import PageDing from 'pages/ding';
 import PageHome from 'pages/home';
 import PageDemo from 'pages/demo';
 import ChartMsg from 'pages/Chart';
@@ -58,11 +59,12 @@ class App extends Component {
 render(
   <Router history={customHistory}>
     <Route name="app" path="/" component={App}>
-      <IndexRoute component={PageDemo} />
+      <IndexRoute component={PageHome} />
       <Route path="home" component={PageHome} />
       <Route path="finance" component={PageFinance} />
       <Route path="inoutput" component={PageInoutput} />
       <Route path="strengthLine" component={PageStrengthline} />
+      <Route path="more" component={PageDing} />
     </Route>
   </Router>,
   document.getElementById('App'),

@@ -15,7 +15,6 @@ export default class Page extends Component {
   componentDidMount() {
     this.handleClick('1234');
   }
-
   handleClick(workNo) {
     this.dispatch('fetch', { workNo });
   }
@@ -32,7 +31,7 @@ export default class Page extends Component {
             <Tag
               list={list}
               error={error}
-              onClick={t.handleClick.bind(t)}
+              onClick={t.handleClick.bind(this)}
             />
           </Group.List>
         </Group>

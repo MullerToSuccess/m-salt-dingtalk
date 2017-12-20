@@ -2,9 +2,41 @@ import { Component } from 'react';
 import {PasswordInput, TabBar, Table} from 'saltui';
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
+import { DDReady } from '../../app/ding';
 // import List from 'components/list';
 // import Info from 'components/info';
+import logic from './logic';
 import './PageFinance.less';
+
+//自己写的子组件：
+class Child extends Component{
+  constructor(props){
+    super(props, logic);
+  }
+  // componentDidMount() {
+  //   this.myHandleClick('1234');
+  // }
+
+  // // handleClick(workNo) {
+  // //   this.dispatch('fetch', { workNo });
+  // // }
+  // myHandleClick(workNo){
+  //   // this.refs.myTextInput.focus();
+  //   this.dispatch('fetch', { workNo });
+  //   // alert(123)
+  // }
+  render(){
+    let t = this;
+    return (
+      <div>
+      <input type='text' ref='myTextInput' />
+      <input type='button' value='focus the text input' onClick={this.myHandleClick} />
+      <br />
+        请输入：<input onChange={this.props.handleEmail} />
+      </div>
+    )
+  }
+}
 
 export default class PageFinance extends Component {
 
@@ -14,6 +46,23 @@ export default class PageFinance extends Component {
     //   componentDidMount(){
     //     alert('PageFinance did mount');
     //   }
+
+    //组件加载后：
+    componentDidMount() {
+      DDReady.then((dd) => {
+
+        dd.biz.navigation.setTitle({
+          title: '财务',
+          onSuccess: function(data) {
+            /*alert('dd is ok')*/
+          },
+          onFail: function(err) {
+              log.e(JSON.stringify(err));
+          }
+          });
+      });
+    }
+
       constructor(props,context) {
         super(props,context);
         this.context.router;
@@ -46,19 +95,30 @@ export default class PageFinance extends Component {
           { title: '更多', 
           icon: '/src/images/tab bar icon_more_normal.png',
           activeIcon:'/src/images/tab bar icon_more_active.png',
-           badge: 2, path: '/c/star' },
+           badge: 2, path: '/more' },
         ];
         this.state = {
           activeIndex:1}; 
                   
       }
 
-  componentDidMount() {
-    this.handleClick('1234');
-  }
+  // componentDidMount() {
+  //   this.handleClick('1234');
+  // }
 
-  handleClick(workNo) {
-    this.dispatch('fetch', { workNo });
+  // handleClick(workNo) {
+  //   this.dispatch('fetch', { workNo });
+  // }
+  //
+  getInitialState(){
+    return{
+      email:''
+    }
+  }
+  handleEmail(event){
+    this.setState({
+      email:event.target.value
+    })
   }
 
   render() {
@@ -129,6 +189,10 @@ export default class PageFinance extends Component {
       lazyUpdate={true}
       onChartReady={this.onChartReadyCallback}
       />
+      <div>
+        用户邮箱：{this.state.email}
+        <Child name='email' handleEmail={this.handleEmail.bind(this)} />
+      </div>
         <div>
         <TabBar tabBarStyle={{}}
                 activeIndex={t.state.activeIndex}
@@ -146,3 +210,5 @@ export default class PageFinance extends Component {
 PageFinance.contextTypes = {
   router: Object
 }
+
+//自己写的组件：

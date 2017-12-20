@@ -3,6 +3,7 @@ import { Component } from 'react';
 //引入echarts和react-fot-react:
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
+import { DDReady } from '../../app/ding';
 
 import { render, Link } from 'react-dom';
 import Toast from 'saltui/lib/Toast';
@@ -28,6 +29,21 @@ export default class PageHome extends Component {
   // componentDidMount(){
   //   alert('have mount')
   // }
+  //组件加载后：调用钉钉api：
+  componentDidMount() {
+    DDReady.then((dd) => {
+
+      dd.biz.navigation.setTitle({
+        title: '排行榜',
+        onSuccess: function(data) {
+          /*alert('dd is ok')*/
+        },
+        onFail: function(err) {
+            log.e(JSON.stringify(err));
+        }
+        });
+    });
+  }
   constructor(props,context) {
     super(props,context);
     this.context.router;
@@ -60,7 +76,7 @@ export default class PageHome extends Component {
       { title: '更多', 
       icon: '/src/images/tab bar icon_more_normal.png',
       activeIcon:'/src/images/tab bar icon_more_active.png',
-       badge: 2, path: '/c/star' },
+       badge: 2, path: '/more' },
     ];
     this.state = {
       maskvisible: false,
@@ -156,7 +172,6 @@ export default class PageHome extends Component {
 
   handleDidHide() {
     console.log('mask did hide');
-    console.log('this index:',)
   }
 
   handleClick(options) {

@@ -5,15 +5,23 @@ import {PasswordInput, TabBar, Table} from 'saltui';
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import './PageInoutput.less';
-
+import { DDReady } from '../../app/ding';
 export default class PageInoutput extends Component {
 
-    // componentWillMount(){
-    //     alert('PageFinance mount');
-    //   }
-    //   componentDidMount(){
-    //     alert('PageFinance did mount');
-    //   }
+  componentDidMount() {
+    DDReady.then((dd) => {
+
+      dd.biz.navigation.setTitle({
+        title: '投入产出',
+        onSuccess: function(data) {
+          /*alert('dd is ok')*/
+        },
+        onFail: function(err) {
+            log.e(JSON.stringify(err));
+        }
+        });
+    });
+  }
       constructor(props,context) {
         super(props,context);
         this.context.router;
@@ -46,16 +54,14 @@ export default class PageInoutput extends Component {
           { title: '更多', 
           icon: '/src/images/tab bar icon_more_normal.png',
           activeIcon:'/src/images/tab bar icon_more_active.png',
-           badge: 2, path: '/c/star' },
+           badge: 2, path: '/more' },
         ];
         this.state = {
           activeIndex:2}; 
                   
       }
 
-  componentDidMount() {
-    this.handleClick('1234');
-  }
+  
 
   handleClick(workNo) {
     this.dispatch('fetch', { workNo });
