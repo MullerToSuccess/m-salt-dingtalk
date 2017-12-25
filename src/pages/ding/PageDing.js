@@ -6,6 +6,70 @@ import './PageDing.less';
 import Button from 'saltui/lib/Button';
 import {PasswordInput, TabBar, Table, Calendar, Datetime, Popup, Slot} from 'saltui';
 
+//复用的组件：Slot:选年，选季，选月;
+
+export class SlotDate extends Component{
+  constructor(props){
+    const {data, value} = Slot.formatDataValue([
+      2011,
+      2012,
+      2013,
+      2014,
+      2015,
+      2016,
+      2017
+    ]);
+    super(props);
+    this.state = {
+      name:'slotDate',
+      value,
+      data,
+      confirmedValue:value
+    }
+  }
+  //组件里面的方法：
+  showSlotMy(){
+    console.log(this.refs);
+    this.refs.mySlot.show();
+  }
+  myConfirm(){
+
+  }
+  myChange(){
+
+  }
+  myCancel(){
+
+  }
+  render(){
+    const t = this;
+
+    return(
+      <div>
+      <div>
+        <h1>{t.state.name}</h1>
+      </div>
+      <div>
+      <div>
+        <Button size="large" onClick={this.showSlotMy.bind(t)}>选季</Button>
+      </div>
+      <div>确认值：{this.state.confirmedValue[0].text}</div>
+      <div>临时值：{this.state.value[0].text}</div>
+    </div>
+    <Slot
+      ref="mySlot"
+      data={this.state.data}
+      value={this.state.value}
+      title="选择日期"
+      onConfirm={this.myConfirm}
+      onChange={this.myChange}
+      onCancel={this.myCancel}
+    />
+    </div>
+    )
+  }
+}
+
 export default class PageDing extends Component {
     componentDidMount() {
         axios.get('http://192.168.0.94:8080/dingtalk/dingding.json')
@@ -354,6 +418,7 @@ export default class PageDing extends Component {
     return (
       <div className="page-demo">
         <h1>hello dingTalk!</h1>
+        <SlotDate />
         <div style={{padding:'10px'}}>
         <Button className="page-button"  onClick={t.handleClickDemo.bind(t)}>{this.state.mclassify}</Button>
         <Button className="page-button"  onClick={t.handleClickDemo.bind(t)}>{this.state.mcorp}</Button> 
