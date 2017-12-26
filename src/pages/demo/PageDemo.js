@@ -9,14 +9,14 @@ import './PageDemo.less';
 export default class Page extends Component {
 
   constructor(props) {
-    super(props, logic);
+    super(props, logic);//super绑定logic
   }
 
   componentDidMount() {
     this.handleClick('1234');
   }
   handleClick(workNo) {
-    this.dispatch('fetch', { workNo });
+    this.dispatch('fetch', { workNo });//派发事件fetch数据
   }
 
   render() {

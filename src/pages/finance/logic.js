@@ -7,8 +7,8 @@ export default {
       };
     },
     async fetch({ fn, setState }, workNo) {
-      const { list } = await fn.DB.SomeModuleAPI.getSomeInfo(workNo);
-      setState({ loaded: true, list });
+      const { list } = await fn.DB.User.getSomeInfo(workNo);
+      setState({ loaded: true, list });//异步请求后得到list刷新state
     },
   };
   

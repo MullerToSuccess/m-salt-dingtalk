@@ -30,7 +30,7 @@ const context = nattyFetch.context({
   },
 });
 
-context.create('SomeModuleAPI', {
+context.create('User', {
   getSomeInfo: {
     mockUrl: 'query/getSomeInfo.json',
     url: 'query/getSomeInfo.json',
@@ -41,6 +41,11 @@ context.create('SomeModuleAPI', {
       });
     },
   },
+  getIcons:{
+    mockUrl: 'query/iconAuth.json',
+    url: 'query/iconAuth.json',
+  },
+
 });
 
 export default context.api;

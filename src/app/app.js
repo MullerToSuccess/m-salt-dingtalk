@@ -15,6 +15,7 @@ import ChartMsg from 'pages/Chart';
 import PageFinance from 'pages/finance';
 import PageInoutput from 'pages/inoutput';
 import PageStrengthline from 'pages/strengthline';
+import NotFound from 'pages/NotFound';
 import DB from 'db';
 import './app.less';
 
@@ -59,12 +60,13 @@ class App extends Component {
 render(
   <Router history={customHistory}>
     <Route name="app" path="/" component={App}>
-      <IndexRoute component={PageHome} />
+      <IndexRoute component={PageDemo} />
       <Route path="home" component={PageHome} />
       <Route path="finance" component={PageFinance} />
       <Route path="inoutput" component={PageInoutput} />
       <Route path="strengthLine" component={PageStrengthline} />
       <Route path="more" component={PageDing} />
+      <Route path='404' component={NotFound} />
     </Route>
   </Router>,
   document.getElementById('App'),
