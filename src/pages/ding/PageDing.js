@@ -72,14 +72,6 @@ export class SlotDate extends Component{
 
 export default class PageDing extends Component {
     componentDidMount() {
-        axios.get('http://192.168.0.94:8080/dingtalk/dingding.json')
-              .then(res => {
-                alert(JSON.stringify(res));
-                // const posts = res.data.data.children.map(obj => obj.data);
-        
-                // this.setState({ posts });
-        
-              });
 
         //axios并发请求：
         // function getUserAccount() {
@@ -132,31 +124,31 @@ export default class PageDing extends Component {
       {
         title: '排行榜',
         // icon: <Time />,
-        icon: '/dingtalk/src/images/tab bar icon_paihangbang_normal.png',
-        activeIcon:'/dingtalk/src/images/tab bar icon_paihangbang_active.png',
+        icon: '/dingtalk/images/tab bar icon_paihangbang_normal.png',
+        activeIcon:'/dingtalk/images/tab bar icon_paihangbang_active.png',
         path: '/home',
       },
       {
         title: '财务',
-        icon: '/dingtalk/src/images/tab bar icon_caiwu_normal.png',
-        activeIcon:'/dingtalk/src/images/tab bar icon_caiwu_active.png',
+        icon: '/dingtalk/images/tab bar icon_caiwu_normal.png',
+        activeIcon:'/dingtalk/images/tab bar icon_caiwu_active.png',
         badge: 'new',
         badgeStyle: { right: -5 },
         path: '/finance',
       },
       {
         title: '投入产出',
-        icon: '/dingtalk/src/images/tab bar icon_touruchanchu_normal.png',
-        activeIcon:'/dingtalk/src/images/tab bar icon_touruchanchu_active.png',
+        icon: '/dingtalk/images/tab bar icon_touruchanchu_normal.png',
+        activeIcon:'/dingtalk/images/tab bar icon_touruchanchu_active.png',
         path: '/inoutput',
       },
       { title: '实力线', 
-      icon: '/dingtalk/src/images/tab bar icon_shilixian_normal.png',
-      activeIcon:'/dingtalk/src/images/tab bar icon_shilixian_active.png',
+      icon: '/dingtalk/images/tab bar icon_shilixian_normal.png',
+      activeIcon:'/dingtalk/images/tab bar icon_shilixian_active.png',
        path: '/strengthLine' },
       { title: '更多', 
-      icon: '/dingtalk/src/images/tab bar icon_more_normal.png',
-      activeIcon:'/dingtalk/src/images/tab bar icon_more_active.png',
+      icon: '/dingtalk/images/tab bar icon_more_normal.png',
+      activeIcon:'/dingtalk/images/tab bar icon_more_active.png',
        badge: 2, path: '/more' },
     ];
     this.state = {
@@ -441,14 +433,6 @@ export default class PageDing extends Component {
       </div>
         </div>
         <div className="demo">
-        <Button onClick={() => {
-          Popup.show(
-            <div className="demo-popup-container-2">分类，时间等</div>
-            , {
-            animationType: 'slide-left',
-          });
-        }}
-        >向左划出</Button>
         <Popup
           content={
             <div>

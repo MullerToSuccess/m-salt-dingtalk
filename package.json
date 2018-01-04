@@ -1,5 +1,5 @@
 {
-  "name": "demo1",
+  "name": "dingtalk",
   "author": "admin",
   "version": "1.0.0",
   "description": "An awesome project",
@@ -9,7 +9,7 @@
   },
   "scripts": {
     "start": "nowa server",
-    "build": "nowa build"
+    "build": "nowa build --skipminify --keepconsole"
   },
   "homepage": "",
   "license": "MIT",

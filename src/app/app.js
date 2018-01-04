@@ -60,7 +60,7 @@ class App extends Component {
 render(
   <Router history={customHistory}>
     <Route name="app" path="/" component={App}>
-      <IndexRoute component={PageDemo} />
+      <IndexRoute component={PageHome} />
       <Route path="home" component={PageHome} />
       <Route path="finance" component={PageFinance} />
       <Route path="inoutput" component={PageInoutput} />

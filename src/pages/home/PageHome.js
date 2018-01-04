@@ -1,38 +1,55 @@
-import { Component } from 'react';
+import { Component } from 'refast';
+// import Refast  from 'refast';
 // import { Router, Route, IndexRoute, hashHistory } from 'react-router';
 //引入echarts和react-fot-react:
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import { DDReady } from '../../app/ding';
-
+import axios from 'axios';
+import mEchart from 'components/echart';
+import Info from 'components/info';
 import { render, Link } from 'react-dom';
 import Toast from 'saltui/lib/Toast';
 import Button from 'saltui/lib/Button';
 // import TabBar from 'saltui/lib/TabBar';
-import { Group, PasswordInput, TabBar, Table} from 'saltui';
+import { Group, PasswordInput, TabBar, Table, Popup} from 'saltui';
 import { Mask } from 'saltui';
 import Time from 'salt-icon/lib/Time';
 import Plus from 'salt-icon/lib/Plus';
 // import PageDemo from 'pages/demo';
 import './PageHome.less';
 // const customHistory = hashHistory;
-// import  tabImg1 from '/src/images/tab bar icon_touruchanchu_active.png';
-// import  tabImg2 from '/src/images/tab bar icon_touruchanchu_active.png';
-// import  tabImg3 from '/src/images/tab bar icon_touruchanchu_active.png';
-// import  tabImg4 from '/src/images/tab bar icon_touruchanchu_active';
-// import  tabImg5 from '/src/images/tab bar icon_touruchanchu_active';
+import logic from './logic';
+import {GLOBALS} from '../../app/variables';
 export default class PageHome extends Component {
 
-  // componentWillMount(){
-  //   alert('will mount')
-  // }
-  // componentDidMount(){
-  //   alert('have mount')
-  // }
-  //组件加载后：调用钉钉api：
+  //组件加载后：
+  //1：初始化我们的组件：echart， table， tabItems 等
+  //2：调用钉钉api，获取所有的要用到钉钉的接口
   componentDidMount() {
+    //跨域测试：
+    // axios.get('http://192.168.0.94:8080/dingtalk/query/accord.json')
+    // .then(res => {
+    //   alert(JSON.stringify(res));
+    // });
+    this.dispatch('fetchEchartOption');//获取echart
+    this.dispatch('fetchTabItems');//获取权限的菜单的item;
+    
     DDReady.then((dd) => {
-
+        //钉钉验证后：根据登录用户信息初始化组件
+        dd.biz.user.get({
+            corpId:dd.config.corpId, // 可选参数，如果不传则使用用户当前企业的corpId。
+            onSuccess: function (info) {
+                alert(info);
+                this.dispatch('fetchEchartOption');//获取echart
+                this.dispatch('fetchTabItems');//获取权限的菜单的item;
+            },
+            onFail: function (err) {
+                alert('失败');
+                // logger.e('userGet fail: ' + JSON.stringify(err));
+            }
+        });
+        
       dd.biz.navigation.setTitle({
         title: '排行榜',
         onSuccess: function(data) {
@@ -45,42 +62,51 @@ export default class PageHome extends Component {
     });
   }
   constructor(props,context) {
-    super(props,context);
-    this.context.router;
-    this.TabBarItems = [
-      {
-        title: '排行榜',
-        // icon: <Time />,
-        icon: '/dingtalk/src/images/tab bar icon_paihangbang_normal.png',
-        activeIcon:'/dingtalk/src/images/tab bar icon_paihangbang_active.png',
-        path: '/home',
-      },
-      {
-        title: '财务',
-        icon: '/dingtalk/src/images/tab bar icon_caiwu_normal.png',
-        activeIcon:'/dingtalk/src/images/tab bar icon_caiwu_active.png',
-        badge: 'new',
-        badgeStyle: { right: -5 },
-        path: '/finance',
-      },
-      {
-        title: '投入产出',
-        icon: '/dingtalk/src/images/tab bar icon_touruchanchu_normal.png',
-        activeIcon:'/dingtalk/src/images/tab bar icon_touruchanchu_active.png',
-        path: '/inoutput',
-      },
-      { title: '实力线', 
-      icon: '/dingtalk/src/images/tab bar icon_shilixian_normal.png',
-      activeIcon:'/dingtalk/src/images/tab bar icon_shilixian_active.png',
-       path: '/strengthLine' },
-      { title: '更多', 
-      icon: '/dingtalk/src/images/tab bar icon_more_normal.png',
-      activeIcon:'/dingtalk/src/images/tab bar icon_more_active.png',
-       badge: 2, path: '/more' },
-    ];
+    super(props, logic);
+    // this.context.router;
+    // this.TabBarItems = ;
     this.state = {
       maskvisible: false,
       activeIndex:0,
+      visible:false,
+      keyword:1,
+      accord:[],
+      popClassCotent:'公司',//默认：公司List
+      order:'订单',
+      organization:'公司',
+      date:'2018.1.3',//时间date:存长整型
+      companyList:[{
+        "name":'公司1',
+        "corpId":"123456"
+      },{
+        "name":'公司2',
+        "corpId":"123456"
+      },{
+        "name":'公司3',
+        "corpId":"123456"
+      },{
+        "name":'公司4',
+        "corpId":"123456"
+      }],//fetch的公司列表
+      departmentList:[{
+        "name":'部门1',
+        "corpId":"123456"
+      },{
+        "name":'部门2',
+        "corpId":"123456"
+      },{
+        "name":'部门3',
+        "corpId":"123456"
+      },{
+        "name":'部门4',
+        "corpId":"123456"
+      }],//fetch的部门的列表
+      clientList:[],//fetch的客户的列表
+      salesList:[],//fetch的业务员的列表
+      productList:[],//fetch的产品的列表
+      productCate:[],//fetch的产品分类的列表
+      option:{},//存我们的echart的所有配置选项
+      tabItems:[],//存放我们的权限菜单的tabItems
       data: {
                 data: [
                   {
@@ -148,14 +174,20 @@ export default class PageHome extends Component {
                     sex: '男',
                   }
                 ],
-              },
-              columns: [
+      },
+      columns: [
                     { dataKey: 'city', title: '单位', align: 'center' },
                     { dataKey: 'name', title: '销售', align: 'center' },
                     { dataKey: 'email', title: '同比', align: 'center' },
                     { dataKey: 'email', title: '环比', align: 'center' }
               ]}; 
+              //绑定事件到组件：
               this.showMask = this.showMask.bind(this);
+              this.handleClick = this.handleClick.bind(this);
+              this.clickFetchAccord = this.clickFetchAccord.bind(this);
+              this.clickFetchOrganization = this.clickFetchOrganization.bind(this);
+              this.clickSetAccord = this.clickSetAccord.bind(this);
+              this.clickSetOrganization = this.clickSetOrganization.bind(this);
   }
 
   showMask() {
@@ -173,10 +205,104 @@ export default class PageHome extends Component {
   handleDidHide() {
     console.log('mask did hide');
   }
+  
 
   handleClick(options) {
     Toast.show(options);
-  }
+}
+    clickFetchAccord(){
+        //请求getAccord接口：
+        this.dispatch('fetchDataAccord');
+        const {accord} = this.state;
+        console.log(22222,accord);
+        //根据返回后的数据：
+        Popup.show(
+            <div className="demo-popup-container-2">
+            {
+                GLOBALS.globalAccord.map(item => (
+                  <div className="t-LH44 t-FBH t-FBAC">
+                    <div className="t-FB1 t-PL10" onclick={this.clickSetAccord.bind(this,item.name)}>
+                      {item.name}{item.typeId ? `(${item.typeId})` : ''}
+                    </div>
+                  </div>
+                ))
+              }
+            </div>
+            , {
+            animationType: 'slide-down',
+          });
+    }
+    //popup筛选条件中设置的点击事件
+    clickSetAccord(args){
+      // console.log(this);
+      // alert('set Accord');
+      // const ref1 = ReactDOM.findDOMNode(this.refs.ref1);//取到真实的dom
+      // console.log(ref1);
+      const contentList = this.state[args.name];
+      this.setState({
+        'order':'name',
+        'popClassCotent':args.cname
+      },() => this.instance.update(this.getContent(this.state[args.name])));//异步setState后回调问题
+      //请求该name下的接口：
+
+    }
+    clickSetOrganization(){
+      this.setState({
+        'organization':'修改'
+      })
+      alert('set Organization');
+    }
+    //获取popup的内容以及更新
+    getContent(popContentList) { 
+      const contentList = popContentList ? popContentList : this.state.companyList;//默认是用的companyList
+      const content = (
+        <div className="demo-popup-container-2">
+        <div className='page-pop-classify'>分类<br/>
+          <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'companyList','cname':'公司'})}>公司</Button>
+          <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'departmentList','cname':'部门'})}>部门</Button> 
+          <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'clientList','cname':'客户'})}>客户</Button>
+          <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'salesList','cname':'业务员'})}>业务员</Button>
+          <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'productList','cname':'产品'})}>产品</Button>
+          <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'produceCate','cname':'产品分类'})}>产品分类</Button>   
+        </div>
+        <div className='page-pop-corp'>{this.state.popClassCotent}<br/>
+        {
+          contentList.map((item => (
+              <Button className="page-btn-setFilter">{item.name}</Button>
+              )
+            )
+          )
+        }   
+        </div>
+        <div className='page-pop-date'>时间<br/>
+
+      </div>
+        <div className='page-pop-category'>依据<br/>
+        <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>订单</Button>
+        <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>发货单</Button> 
+        <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>发票</Button>
+        <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>收款单</Button>   
+      </div>
+        </div>
+      );
+      return content;
+    }
+    clickFetchOrganization(){
+        //请求getOrganization的接口：
+        console.log(this);
+        this.instance = Popup.show(
+          this.getContent()
+          , {
+              animationType: 'slide-left',
+          onMaskClose:function(){
+            alert('mask 关闭');
+            //popup关闭后的回调：拿到所有的筛选的参数1：订单....；2：公司or部门..3：时间（long）
+            //然后通过接口查询this.dispatch();
+          }
+          });
+        // this.dispatch('fetchDataOrganization');
+    }
+
   onChartReadyCallback(){
     // alert('坲克');
     console.log('chart is ready.');
@@ -191,70 +317,10 @@ export default class PageHome extends Component {
         t.showMask();
       }
     };
-    let option = {
-      title:{
-        text: '排行榜',
-        x:'center'
-      },
-      tooltip : {
-          trigger: 'axis'
-      },
-      legend: {
-          data:['最高气温','最低气温']
-      },
-      calculable : true,
-      xAxis : [
-          {
-              type : 'category',
-              boundaryGap : false,
-              data : ['周一','周二','周三','周四','周五','周六','周日']
-          }
-      ],
-      yAxis : [
-          {
-              type : 'value',
-              axisLabel : {
-                  formatter: '{value} °C'
-              }
-          }
-      ],
-      series : [
-          {
-              name:'最高气温',
-              type:'line',
-              data:[11, 11, 15, 13, 12, 13, 10],
-              markPoint : {
-                  data : [
-                      {type : 'max', name: '最大值'},
-                      {type : 'min', name: '最小值'}
-                  ]
-              },
-              markLine : {
-                  data : [
-                      {type : 'average', name: '平均值'}
-                  ]
-              }
-          },
-          {
-              name:'最低气温',
-              type:'line',
-              data:[1, -2, 2, 5, 3, 2, 0],
-              markPoint : {
-                  data : [
-                      {name : '周最低', value : -2, xAxis: 1, yAxis: -1.5}
-                  ]
-              },
-              markLine : {
-                  data : [
-                      {type : 'average', name : '平均值'}
-                  ]
-              }
-          }
-      ]
-  };
-                      
+    // const { option = [], error } = t.state;
+    // const Tag = option ? mEchart : Info;
+    const { option, tabItems } = t.state;  //用到组件中的在state中取过来         
     return(
-      
             <div className="page-home">
                <Mask visible={t.state.maskvisible}
                 onWillHide={t.handleWillHide.bind(t)}
@@ -263,18 +329,25 @@ export default class PageHome extends Component {
               />
               
               <div className="page-graph">
+                
                 <div style={{padding:'10px'}}>
-                <Button className="page-button"  onClick={this.handleClick}>订单</Button>
-                <Button className="page-button"  onClick={this.handleClick}>公司</Button> 
-                <Button className="page-button"  onClick={this.handleClick}>2017.11</Button> 
+                  <Button className="page-button"  onClick={t.clickFetchAccord.bind(t)}>{this.state.order}</Button>
+                  <Button className="page-button"  onClick={t.clickFetchOrganization.bind(t)}>{this.state.organization}</Button> 
+                  <Button className="page-button"  onClick={t.handleClick}>{this.state.date}</Button> 
+                  <div className="demo">
+                  
+               
                 </div>
+                </div>
+                
                 <ReactEcharts className="page-echart"
-                echarts={echarts}
-                option={option}
-                style={{height: '300px'}}
-                lazyUpdate={true}
-                onChartReady={this.onChartReadyCallback}
+                  echarts={echarts}
+                  option={option}
+                  style={{height: '300px'}}
+                  lazyUpdate={true}
+                  onChartReady={this.onChartReadyCallback}
                 />
+               
               </div>
               
               <div>
@@ -290,7 +363,7 @@ export default class PageHome extends Component {
                         onChange={onChange}
                         iconHeight={24}
                         cIconHeight={24}
-                        items={this.TabBarItems}
+                        items={tabItems}
                       />
               </div>
             </div>

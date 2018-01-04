@@ -1,0 +1,21 @@
+{
+    "success": true,
+    "content":{
+        "organization":[{
+            "name":"公司",
+            "typeId":"1"
+        },{
+            "name":"部门",
+            "typeId":"2"
+        },{
+            "name":"客户",
+            "typeId":"3"
+        },{
+            "name":"业务员",
+            "typeId":"4"
+        },{
+            "name":"产品",
+            "typeId":"5"
+        }]
+    }
+}

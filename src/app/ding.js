@@ -9,8 +9,7 @@ const getDingtalkConfig = async () => {
       timeStamp: window._config.timeStamp, // 必填，生成签名的时间戳
       nonceStr: window._config.nonceStr, // 必填，生成签名的随机串
       signature: window._config.signature, // 必填，签名
-      type: 0, //选填。0表示微应用的jsapi,1表示服务窗的jsapi。不填默认为0。该参数从dingtalk.js的0.8.3版本开始支持
-      jsApiList: apiList,
+      jsApiList: apiList
     };
   };
   
@@ -23,9 +22,9 @@ const getDingtalkConfig = async () => {
     'device.notification.prompt',
     'biz.ding.post',
     'biz.util.openLink',
-    'biz.navigation.setTitle'
+    'biz.navigation.setTitle',
+    'biz.user.get'
   ];
-  
   const dd = window.dd;
   if (!dd) {
     console.error(`window.dd为${dd}，请确认钉钉 API 是否加载/加载顺序正确`)

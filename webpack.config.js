@@ -3,7 +3,7 @@ module.exports = function webpackConfig(config, webpack) {
     name: 'app',
     minChunks: Infinity,
   }));
-  // module:{
+  // config.module={
   //   loaders: [
   //     { test: /\.(png|jpg|jpeg|gif)$/, loader: "url-loader?limit=8192&name=[name].[ext]&outputPath=img/&publicPath=../" }
   // ]
@@ -17,7 +17,8 @@ module.exports = function webpackConfig(config, webpack) {
     fastclick: 'window.FastClick',
     lodash: 'window._',
   }];
-  
+  config.devtool = '#source-map';//配置source-map
+
   if (process.argv[2] === 'server') {
     config.externals.push((context, request, callback, matches) => {
       if (matches = /saltui\/lib\/(\w+)/.exec(request)) {
