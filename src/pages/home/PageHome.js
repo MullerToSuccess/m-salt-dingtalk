@@ -12,7 +12,7 @@ import { render, Link } from 'react-dom';
 import Toast from 'saltui/lib/Toast';
 import Button from 'saltui/lib/Button';
 // import TabBar from 'saltui/lib/TabBar';
-import { Group, PasswordInput, TabBar, Table, Popup} from 'saltui';
+import { Group, PasswordInput, TabBar, Table, Popup, CalendarField, Scroller} from 'saltui';
 import { Mask } from 'saltui';
 import Time from 'salt-icon/lib/Time';
 import Plus from 'salt-icon/lib/Plus';
@@ -28,7 +28,7 @@ export default class PageHome extends Component {
   //2：调用钉钉api，获取所有的要用到钉钉的接口
   componentDidMount() {
     //跨域测试：
-    // axios.get('http://192.168.0.94:8080/dingtalk/query/accord.json')
+    // axios.get('http://192.168.0.94:8080/dingtalk/test')
     // .then(res => {
     //   alert(JSON.stringify(res));
     // });
@@ -70,11 +70,19 @@ export default class PageHome extends Component {
       activeIndex:0,
       visible:false,
       keyword:1,
+      // value: '2016-01-02',
+      value: {
+        startDate: '2016-01-02',
+        startDateType: 'AM',
+        endDate: '2016-01-03',
+        endDateType: 'PM',
+      },
       accord:[],
       popClassCotent:'公司',//默认：公司List
       order:'订单',
       organization:'公司',
       date:'2018.1.3',//时间date:存长整型
+      //公司，部门，业务员等的接口通过后台接口获得：
       companyList:[{
         "name":'公司1',
         "corpId":"123456"
@@ -107,6 +115,7 @@ export default class PageHome extends Component {
       productCate:[],//fetch的产品分类的列表
       option:{},//存我们的echart的所有配置选项
       tabItems:[],//存放我们的权限菜单的tabItems
+      
       data: {
                 data: [
                   {
@@ -188,6 +197,7 @@ export default class PageHome extends Component {
               this.clickFetchOrganization = this.clickFetchOrganization.bind(this);
               this.clickSetAccord = this.clickSetAccord.bind(this);
               this.clickSetOrganization = this.clickSetOrganization.bind(this);
+              // this.onOk = this.onOk.bind(this);
   }
 
   showMask() {
@@ -209,7 +219,10 @@ export default class PageHome extends Component {
 
   handleClick(options) {
     Toast.show(options);
-}
+  }
+  subPop(options){
+    console.log(options);
+  }
     clickFetchAccord(){
         //请求getAccord接口：
         this.dispatch('fetchDataAccord');
@@ -239,6 +252,7 @@ export default class PageHome extends Component {
       // const ref1 = ReactDOM.findDOMNode(this.refs.ref1);//取到真实的dom
       // console.log(ref1);
       const contentList = this.state[args.name];
+      
       this.setState({
         'order':'name',
         'popClassCotent':args.cname
@@ -252,11 +266,39 @@ export default class PageHome extends Component {
       })
       alert('set Organization');
     }
+    
     //获取popup的内容以及更新
     getContent(popContentList) { 
+      //时间选项的属性：
+    const props = {
+      className: 'calendar-field-demo myCalender',
+      label: '日期区间',
+      placeholder: ['开始时间', '结束时间'],
+      required: false,
+      multiLine: true,
+      layout: 'v',
+      type: 'month',
+      singleMode: false,
+      // formatter: 'yyyy-MM-dd',
+      showWeek: false,
+      showDateType: false,
+      showHalfDay: true,
+      topPanelTitle: 'title',
+      value: this.state.value,
+      tip: '这里是提示信息',
+      readOnly: false,
+      animationType: 'slideLeft',
+      onOk: this.onOk.bind(this),//选择确定后的触发事件
+      showTopPanel: true,
+      // formatter: 'yyyy.MM.dd',
+    }
+      //分类有公司，部门，客户，业务员，产品，产品分类等：
+      //分别根据不同的接口访问后台接口获取list：
       const contentList = popContentList ? popContentList : this.state.companyList;//默认是用的companyList
       const content = (
-        <div className="demo-popup-container-2">
+        // <Scroller mouseWheel className='page'>
+        <div className="demo-popup-container-2 myPop" >
+        
         <div className='page-pop-classify'>分类<br/>
           <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'companyList','cname':'公司'})}>公司</Button>
           <Button className="page-btn-setFilter"  onClick={this.clickSetAccord.bind(this,{'name':'departmentList','cname':'部门'})}>部门</Button> 
@@ -274,8 +316,18 @@ export default class PageHome extends Component {
           )
         }   
         </div>
-        <div className='page-pop-date'>时间<br/>
-
+        <div className='page-pop-date'>时间
+        <ButtonGroup>
+          <Button type="secondary" display="inline" onClick={this.handleClick}>年</Button>
+          <Button type="secondary" display="inline" onClick={this.handleClick}>季</Button>
+          <Button type="primary" display="inline" onClick={this.handleClick}>月</Button>
+        </ButtonGroup>
+        <br/>
+        <Group>
+        <Group.List>
+          <CalendarField {...props} />
+        </Group.List>
+      </Group>
       </div>
         <div className='page-pop-category'>依据<br/>
         <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>订单</Button>
@@ -283,7 +335,15 @@ export default class PageHome extends Component {
         <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>发票</Button>
         <Button className="page-btn-setFilter"  onClick={this.clickSetOrganization}>收款单</Button>   
       </div>
+      <div className="section-content">
+      <Button.Group>
+        <Button type="secondary" display="banner" onClick={this.handleClick}>重置</Button>
+        <Button type="primary" display="banner" onClick={this.handleClick}>确定</Button>
+      </Button.Group>
+    </div>
         </div>
+        // </Scroller>
+        
       );
       return content;
     }
@@ -306,6 +366,16 @@ export default class PageHome extends Component {
   onChartReadyCallback(){
     // alert('坲克');
     console.log('chart is ready.');
+  }
+  //选择时间控件选择后触发事件：
+  onOk(value){
+    // alert(JSON.stringify(value));
+    console.log(11,value);
+    console.log(22,this.state.value);
+    // this.setState({value});
+    this.setState({
+      value,
+    },() => this.instance.update(this.getContent()));//更新popup的content
   }
   render() {
     const t = this;
@@ -335,7 +405,6 @@ export default class PageHome extends Component {
                   <Button className="page-button"  onClick={t.clickFetchOrganization.bind(t)}>{this.state.organization}</Button> 
                   <Button className="page-button"  onClick={t.handleClick}>{this.state.date}</Button> 
                   <div className="demo">
-                  
                
                 </div>
                 </div>

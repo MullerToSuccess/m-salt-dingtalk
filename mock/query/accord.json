@@ -14,6 +14,12 @@
             "name":"收款单",
             "typeId":"4"
         }],
+        "companyList":{},
+        "departmentList":{},
+        "clientList":{},
+        "salesList":{},
+        "productList":{},
+        "produceCate":{},
         "option":{
             "tooltip": {
                 "trigger": "axis"

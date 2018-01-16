@@ -1,13 +1,32 @@
 module.exports = function webpackConfig(config, webpack) {
-  config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
-    name: 'app',
-    minChunks: Infinity,
+    config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
+      name: 'app',//公用
+      // minChunks: Infinity,
+      minChunks: 2,
+      // filename:'app.js',
+      chunks:['home','finance','inoutput','strengthline','ding']//选择提取公共的部分打包到app.js中
+    }));
+
+
+  //如果要上传到线上的服务器，也就是我们的8080/dingtalk下的路径下：
+  //修改publicPath:
+  config.output.publicPath = process.env.NODE_ENV === 'production'
+  ? config.build.assetsPublicPath
+  : config.dev.assetsPublicPath
+  
+  config.build.assetsPublicPath = './dingtalk/dist/';//生产环境下路径
+  config.dev.assetsPublicPath = './dist/';//开发环境下路径
+
+  // 清除注释
+  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+    output:{
+      comments:false
+    },
+    compress:{
+      warnings:false
+    }
   }));
-  // config.module={
-  //   loaders: [
-  //     { test: /\.(png|jpg|jpeg|gif)$/, loader: "url-loader?limit=8192&name=[name].[ext]&outputPath=img/&publicPath=../" }
-  // ]
-  // }
+ 
 
   config.externals = [{
     lie: 'window.Promise',
