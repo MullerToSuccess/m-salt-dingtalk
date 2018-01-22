@@ -7,7 +7,8 @@
                 "icon": "/dingtalk/images/tab bar icon_paihangbang_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_paihangbang_active.png", 
                 "path": "/home",
-                "isDefault": true
+                "isDefault": true,
+                "category":"cate1"
             }, 
             {
                 "title": "财务", 
@@ -18,21 +19,24 @@
                     "right": -5
                 }, 
                 "path": "/finance",
-                "isDefault": true
+                "isDefault": true,
+                "category":"cate1"
             }, 
             {
                 "title": "投入产出", 
                 "icon": "/dingtalk/images/tab bar icon_touruchanchu_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_touruchanchu_active.png", 
                 "path": "/inoutput",
-                "isDefault": true
+                "isDefault": true,
+                "category":"cate1"
             }, 
             {
                 "title": "实力线", 
                 "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
                 "path": "/strengthLine",
-                "isDefault": true
+                "isDefault": true,
+                "category":"cate1"
             }, 
             {
                 "title": "更多", 
@@ -40,25 +44,53 @@
                 "activeIcon": "/dingtalk/images/tab bar icon_more_active.png", 
                 "badge": 2, 
                 "path": "/more",
-                "isDefault": true
+                "isDefault": true,
+                "category":"cate1"
             },{
                 "title": "more1", 
                 "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
                 "path": "/strengthLine",
-                "isDefault": false
+                "isDefault": false,
+                "category":"cate1"
             },{
                 "title": "more2", 
                 "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
                 "path": "/strengthLine",
-                "isDefault": false
+                "isDefault": false,
+                "category":"cate1"
             },{
                 "title": "more3", 
                 "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
-                "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_caiwu_active.png", 
                 "path": "/strengthLine",
-                "isDefault": false
+                "isDefault": false,
+                "category":"cate1"
+            },
+            {
+                "title": "更多4", 
+                "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_caiwu_active.png", 
+                "path": "/strengthLine",
+                "isDefault": false,
+                "category":"cate2"
+            },
+            {
+                "title": "更多5", 
+                "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_caiwu_active.png", 
+                "path": "/strengthLine",
+                "isDefault": false,
+                "category":"cate2"
+            },
+            {
+                "title": "更多6", 
+                "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_caiwu_active.png", 
+                "path": "/strengthLine",
+                "isDefault": false,
+                "category":"cate2"
             }
         ]
     }

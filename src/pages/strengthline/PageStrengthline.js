@@ -1,4 +1,4 @@
-import { Component } from 'react';
+import { Component } from 'refast';
 import {PasswordInput, TabBar, Table} from 'saltui';
 // import List from 'components/list';
 // import Info from 'components/info';

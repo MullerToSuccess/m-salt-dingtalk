@@ -68,7 +68,7 @@ context.create('Category', {
 context.create('Option',{
   getEchartOption:{
     mockUrl: 'query/echartOption.json',
-    url:'dingtalk/query/echartOption.json',
+    url:'meris/pages/platform/mock/echartOption.json',
     willFetch() {
       Toast.show({
         type: 'loading',
@@ -78,7 +78,7 @@ context.create('Option',{
   },
   getTabItems:{
     mockUrl: 'query/tabItems.json',
-    url:'dingtalk/query/tabItems.json',
+    url:'meris/pages/platform/mock/tabItems.json',
     willFetch() {
       Toast.show({
         type: 'loading',

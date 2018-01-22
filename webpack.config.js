@@ -1,8 +1,8 @@
 module.exports = function webpackConfig(config, webpack) {
     config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
       name: 'app',//公用
-      minChunks: Infinity,
-      // minChunks: 2,
+      // minChunks: Infinity,
+      minChunks: 2
       // filename:'app.js',
       // chunks:['home','finance','inoutput','strengthline','ding']//选择提取公共的部分打包到app.js中
     }));

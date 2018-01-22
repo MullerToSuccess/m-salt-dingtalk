@@ -38,14 +38,13 @@ export default class PageDing extends Component {
       mcorp:'爱途享',
       mdate:'1499702400000',
       keyword:1,
+      allItems:[],
       defaultItems:[],
       moreItems:[]
     }; 
     this.datetimeProps = {
       locale: 'zh-cn',
     }
-    
-    
       window.dd && window.dd.ui.webViewBounce.disable();
   }
   
@@ -88,7 +87,7 @@ export default class PageDing extends Component {
 
   render() {
       const t =this;
-      const {moreItems} = t.state;
+      const {moreItems,allItems} = t.state;
       DDReady.then((dd) => {
         dd.biz.navigation.setTitle({
           title: '更多',
@@ -107,13 +106,15 @@ export default class PageDing extends Component {
         t.context.router.push(path);
         
       };
+
     return (
       <div className="page-demo">
         <div>
         {
-          moreItems.map(((item, index) => (
-              <div className='moreIcon'> 
-                <img src={item.activeIcon}>{item.title}</img>
+          allItems.map(((item, index) => (
+              <div className='moreIcon'>
+                <img
+                 src={item.activeIcon}>{item.title}</img>
               </div>
               )
             )
