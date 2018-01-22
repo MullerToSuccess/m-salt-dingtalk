@@ -18,8 +18,10 @@
     "classnames": "~2.1.2",
     "echarts": "^3.8.5",
     "echarts-for-react": "^2.0.0",
+    "fastclick": "^1.0.6",
     "natty-fetch": "~2.4.2",
     "natty-storage": "~2.0.2",
+    "react-router": "^4.2.0",
     "refast": "~1.2.3",
     "saltui": "^3.1.17",
     "url-loader": "^0.6.2"

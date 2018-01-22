@@ -8,13 +8,14 @@ import Toast from 'saltui/lib/Toast';
 import Dialog from 'saltui/lib/Dialog';
 
 import { isDev } from 'variables';
-// import PageDing from 'pages/ding';
-// import PageHome from 'pages/home';
-// import PageDemo from 'pages/demo';
-// import ChartMsg from 'pages/Chart';
-// import PageFinance from 'pages/finance';
-// import PageInoutput from 'pages/inoutput';
-// import PageStrengthline from 'pages/strengthline';
+//直接import组件：在不按需加载的时候：
+import PageDing from 'pages/ding';
+import PageHome from 'pages/home';
+import PageDemo from 'pages/demo';
+import ChartMsg from 'pages/Chart';
+import PageFinance from 'pages/finance';
+import PageInoutput from 'pages/inoutput';
+import PageStrengthline from 'pages/strengthline';
 import NotFound from 'pages/NotFound';
 import DB from 'db';
 import './app.less';
@@ -61,42 +62,43 @@ class App extends Component {
 // ? $path.getAttribute('content')+'/app/js/'
 // : '/';
 //webpack按需加载：
-var PageHome =  function(location, callback) {
-  require.ensure([], function(require){
-    callback(null, require('../pages/home'));
-  },'home');
-};
-var PageFinance = function(location, callback) {
-  require.ensure([], function(require){
-    callback(null, require('../pages/finance'));
-  },'finance');
-};
-var PageInoutput = function(location, callback) {
-  require.ensure([], function(require){
-    callback(null, require('../pages/inoutput'));
-  },'inoutput');
-}; 
-var PageStrengthline = function(location, callback) {
-  require.ensure([], function(require){
-    callback(null, require('../pages/strengthline'));
-  },'strengthline');
-};
-var PageDing = function(location, callback) {
-  require.ensure([], function(require){
-    callback(null, require('../pages/ding'));
-  },'ding');
-};
+//调试先不管按需加载的问题：
+// var PageHome =  function(location, callback) {
+//   require.ensure([], function(require){
+//     callback(null, require('../pages/home'));
+//   },'home');
+// };
+// var PageFinance = function(location, callback) {
+//   require.ensure([], function(require){
+//     callback(null, require('../pages/finance'));
+//   },'finance');
+// };
+// var PageInoutput = function(location, callback) {
+//   require.ensure([], function(require){
+//     callback(null, require('../pages/inoutput'));
+//   },'inoutput');
+// }; 
+// var PageStrengthline = function(location, callback) {
+//   require.ensure([], function(require){
+//     callback(null, require('../pages/strengthline'));
+//   },'strengthline');
+// };
+// var PageDing = function(location, callback) {
+//   require.ensure([], function(require){
+//     callback(null, require('../pages/ding'));
+//   },'ding');
+// };
 
 render(
   <Router history={customHistory}>
     <Route name="app" path="/" component={App}>
-      <IndexRoute getComponent={PageHome} />
-      <Route path="home" getComponent={PageHome} />
-      <Route path="finance" getComponent={PageFinance} />
-      <Route path="inoutput" getComponent={PageInoutput} />
-      <Route path="strengthLine" getComponent={PageStrengthline} />
-      <Route path="more" getComponent={PageDing} />
-      <Route path='404' getComponent={NotFound} />
+      <IndexRoute component={PageHome} />
+      <Route path="home" component={PageHome} />
+      <Route path="finance" component={PageFinance} />
+      <Route path="inoutput" component={PageInoutput} />
+      <Route path="strengthLine" component={PageStrengthline} />
+      <Route path="more" component={PageDing} />
+      <Route path='404' component={NotFound} />
     </Route>
   </Router>,
   document.getElementById('App'),

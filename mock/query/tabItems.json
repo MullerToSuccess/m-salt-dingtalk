@@ -6,7 +6,8 @@
                 "title": "排行榜", 
                 "icon": "/dingtalk/images/tab bar icon_paihangbang_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_paihangbang_active.png", 
-                "path": "/home"
+                "path": "/home",
+                "isDefault": true
             }, 
             {
                 "title": "财务", 
@@ -16,26 +17,48 @@
                 "badgeStyle": {
                     "right": -5
                 }, 
-                "path": "/finance"
+                "path": "/finance",
+                "isDefault": true
             }, 
             {
                 "title": "投入产出", 
                 "icon": "/dingtalk/images/tab bar icon_touruchanchu_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_touruchanchu_active.png", 
-                "path": "/inoutput"
+                "path": "/inoutput",
+                "isDefault": true
             }, 
             {
                 "title": "实力线", 
                 "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
-                "path": "/strengthLine"
+                "path": "/strengthLine",
+                "isDefault": true
             }, 
             {
                 "title": "更多", 
                 "icon": "/dingtalk/images/tab bar icon_more_normal.png", 
                 "activeIcon": "/dingtalk/images/tab bar icon_more_active.png", 
                 "badge": 2, 
-                "path": "/more"
+                "path": "/more",
+                "isDefault": true
+            },{
+                "title": "more1", 
+                "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
+                "path": "/strengthLine",
+                "isDefault": false
+            },{
+                "title": "more2", 
+                "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
+                "path": "/strengthLine",
+                "isDefault": false
+            },{
+                "title": "more3", 
+                "icon": "/dingtalk/images/tab bar icon_shilixian_normal.png", 
+                "activeIcon": "/dingtalk/images/tab bar icon_shilixian_active.png", 
+                "path": "/strengthLine",
+                "isDefault": false
             }
         ]
     }

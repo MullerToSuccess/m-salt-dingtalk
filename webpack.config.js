@@ -1,31 +1,31 @@
 module.exports = function webpackConfig(config, webpack) {
     config.plugins.push(new webpack.optimize.CommonsChunkPlugin({
       name: 'app',//公用
-      // minChunks: Infinity,
-      minChunks: 2,
+      minChunks: Infinity,
+      // minChunks: 2,
       // filename:'app.js',
-      chunks:['home','finance','inoutput','strengthline','ding']//选择提取公共的部分打包到app.js中
+      // chunks:['home','finance','inoutput','strengthline','ding']//选择提取公共的部分打包到app.js中
     }));
 
 
   //如果要上传到线上的服务器，也就是我们的8080/dingtalk下的路径下：
   //修改publicPath:
-  config.output.publicPath = process.env.NODE_ENV === 'production'
-  ? config.build.assetsPublicPath
-  : config.dev.assetsPublicPath
+  // config.output.publicPath = process.env.NODE_ENV === 'production'
+  // ? config.build.assetsPublicPath
+  // : config.dev.assetsPublicPath
   
-  config.build.assetsPublicPath = './dingtalk/dist/';//生产环境下路径
-  config.dev.assetsPublicPath = './dist/';//开发环境下路径
+  // config.build.assetsPublicPath = './dingtalk/dist/';//生产环境下路径
+  // config.dev.assetsPublicPath = './dist/';//开发环境下路径
 
   // 清除注释
-  config.plugins.push(new webpack.optimize.UglifyJsPlugin({
-    output:{
-      comments:false
-    },
-    compress:{
-      warnings:false
-    }
-  }));
+  // config.plugins.push(new webpack.optimize.UglifyJsPlugin({
+  //   output:{
+  //     comments:false
+  //   },
+  //   compress:{
+  //     warnings:false
+  //   }
+  // }));
  
 
   config.externals = [{
@@ -36,7 +36,7 @@ module.exports = function webpackConfig(config, webpack) {
     fastclick: 'window.FastClick',
     lodash: 'window._',
   }];
-  config.devtool = '#source-map';//配置source-map
+  // config.devtool = '#source-map';//配置source-map
 
   if (process.argv[2] === 'server') {
     config.externals.push((context, request, callback, matches) => {
