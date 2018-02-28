@@ -1,124 +1,81 @@
-import { Component } from 'refast';
-import {PasswordInput, TabBar, Table} from 'saltui';
-import echarts from 'echarts';
-import ReactEcharts from 'echarts-for-react';
-import { DDReady } from '../../app/ding';
+import { Component } from "refast";
+import { PasswordInput, TabBar, Table } from "saltui";
+import echarts from "echarts";
+import ReactEcharts from "echarts-for-react";
+import { DDReady } from "../../app/ding";
 // import List from 'components/list';
 // import Info from 'components/info';
-import logic from './logic';
-import './PageFinance.less';
+import logic from "./logic";
+import "./PageFinance.less";
 
 //自己写的子组件：
-class Child extends Component{
-  constructor(props){
+class Child extends Component {
+  constructor(props) {
     super(props, logic);
   }
-  // componentDidMount() {
-  //   this.myHandleClick('1234');
-  // }
-
-  // // handleClick(workNo) {
-  // //   this.dispatch('fetch', { workNo });
-  // // }
-  // myHandleClick(workNo){
-  //   // this.refs.myTextInput.focus();
-  //   this.dispatch('fetch', { workNo });
-  //   // alert(123)
-  // }
-  render(){
+  render() {
     let t = this;
     return (
       <div>
-      <input type='text' ref='myTextInput' />
-      <input type='button' value='focus the text input' onClick={this.myHandleClick} />
-      <br />
+        <input type="text" ref="myTextInput" />
+        <input
+          type="button"
+          value="focus the text input"
+          onClick={this.myHandleClick}
+        />
+        <br />
         请输入：<input onChange={this.props.handleEmail} />
       </div>
-    )
+    );
   }
 }
 
 export default class PageFinance extends Component {
+  // componentWillMount(){
+  //     alert('PageFinance mount');
+  //   }
+  //   componentDidMount(){
+  //     alert('PageFinance did mount');
+  //   }
 
-    // componentWillMount(){
-    //     alert('PageFinance mount');
-    //   }
-    //   componentDidMount(){
-    //     alert('PageFinance did mount');
-    //   }
+  //组件加载后：
+  componentDidMount() {
+    const tt = this;
 
-    //组件加载后：
-    componentDidMount() {
-      DDReady.then((dd) => {
-
-        dd.biz.navigation.setTitle({
-          title: '财务',
-          onSuccess: function(data) {
-            /*alert('dd is ok')*/
-          },
-          onFail: function(err) {
-              log.e(JSON.stringify(err));
-          }
-          });
+    this.dispatch('fetchTabItems');//获取权限的菜单的item;
+    this.dispatch("fetchEchartOption", 3); //获取echart
+    DDReady.then(dd => {
+      dd.biz.navigation.setTitle({
+        title: "财务",
+        onSuccess: function(data) {
+          /*alert('dd is ok')*/
+        },
+        onFail: function(err) {
+          log.e(JSON.stringify(err));
+        }
       });
-    }
-
-      constructor(props,context) {
-        super(props,context);
-        this.context.router;
-        this.TabBarItems = [
-          {
-            title: '排行榜',
-            // icon: <Time />,
-            icon: '/dingtalk/images/tab bar icon_paihangbang_normal.png',
-            activeIcon:'/dingtalk/images/tab bar icon_paihangbang_active.png',
-            path: '/home',
-          },
-          {
-            title: '财务',
-            icon: '/dingtalk/images/tab bar icon_caiwu_normal.png',
-            activeIcon:'/dingtalk/images/tab bar icon_caiwu_active.png',
-            badge: 'new',
-            badgeStyle: { right: -5 },
-            path: '/finance',
-          },
-          {
-            title: '投入产出',
-            icon: '/dingtalk/images/tab bar icon_touruchanchu_normal.png',
-            activeIcon:'/dingtalk/images/tab bar icon_touruchanchu_active.png',
-            path: '/inoutput',
-          },
-          { title: '实力线', 
-          icon: '/dingtalk/images/tab bar icon_shilixian_normal.png',
-          activeIcon:'/dingtalk/images/tab bar icon_shilixian_active.png',
-           path: '/strengthLine' },
-          { title: '更多', 
-          icon: '/dingtalk/images/tab bar icon_more_normal.png',
-          activeIcon:'/dingtalk/images/tab bar icon_more_active.png',
-           badge: 2, path: '/more' },
-        ];
-        this.state = {
-          activeIndex:1}; 
-                  
-      }
-
-  // componentDidMount() {
-  //   this.handleClick('1234');
-  // }
-
-  // handleClick(workNo) {
-  //   this.dispatch('fetch', { workNo });
-  // }
-  //
-  getInitialState(){
-    return{
-      email:''
-    }
+    });
   }
-  handleEmail(event){
+
+  constructor(props, context) {
+    super(props, logic);
+    this.state = {
+      activeIndex: 1,
+      allItems: [],
+      defaultItems: [],
+      moreItems: [],
+      option:{}
+    };
+  }
+  getInitialState() {
+    return {
+      email: ""
+    };
+  }
+  handleEmail(event) {
     this.setState({
-      email:event.target.value
-    })
+      email: event.target.value
+    });
   }
 
   render() {
@@ -132,83 +89,36 @@ export default class PageFinance extends Component {
       //   t.showMask();
       // }
     };
-    let option = {
-      title : {
-          text: '财务',
-          x:'center'
-      },
-      tooltip : {
-          trigger: 'item',
-          formatter: "{a} <br/>{b} : {c} ({d}%)"
-      },
-      toolbox: {
-          show : true,
-          feature : {
-              mark : {show: true},
-              dataView : {show: true, readOnly: false},
-              magicType : {
-                  show: true, 
-                  type: ['pie', 'funnel'],
-                  option: {
-                      funnel: {
-                          x: '25%',
-                          width: '50%',
-                          funnelAlign: 'left',
-                          max: 1548
-                      }
-                  }
-              },
-              restore : {show: true},
-              saveAsImage : {show: true}
-          }
-      },
-      calculable : true,
-      series : [
-          {
-              name:'访问来源',
-              type:'pie',
-              radius : '55%',
-              center: ['50%', '60%'],
-              data:[
-                  {value:335, name:'直接访问'},
-                  {value:310, name:'邮件营销'},
-                  {value:234, name:'联盟广告'},
-                  {value:135, name:'视频广告'},
-                  {value:1548, name:'搜索引擎'}
-              ]
-          }
-      ]
-  };
-                      
+    const { defaultItems, option } = t.state;
+
     return (
       <div className="page-chart">
-      <ReactEcharts className="page-echart"
-      echarts={echarts}
-      option={option}
-      style={{height: '300px'}}
-      lazyUpdate={true}
-      onChartReady={this.onChartReadyCallback}
-      />
-      <div>
-        用户邮箱：{this.state.email}
-        <Child name='email' handleEmail={this.handleEmail.bind(this)} />
-      </div>
+        <ReactEcharts
+          className="page-echart"
+          echarts={echarts}
+          option={option}
+          style={{ height: "300px" }}
+          lazyUpdate={true}
+          onChartReady={this.onChartReadyCallback}
+        />
         <div>
-        <TabBar tabBarStyle={{}}
-                activeIndex={t.state.activeIndex}
-                onChange={onChange}
-                iconHeight={24}
-                cIconHeight={24}
-                items={this.TabBarItems}
-              />
+          用户邮箱：{this.state.email}
+          <Child name="email" handleEmail={this.handleEmail.bind(this)} />
+        </div>
+        <div>
+          <TabBar
+            tabBarStyle={{}}
+            activeIndex={t.state.activeIndex}
+            onChange={onChange}
+            iconHeight={24}
+            cIconHeight={24}
+            items={t.state.defaultItems}
+          />
+        </div>
       </div>
-      </div>
-      
     );
   }
 }
 PageFinance.contextTypes = {
   router: Object
-}
-
-//自己写的组件：
+};

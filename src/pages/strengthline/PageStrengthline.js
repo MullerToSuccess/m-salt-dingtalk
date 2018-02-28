@@ -5,6 +5,7 @@ import {PasswordInput, TabBar, Table} from 'saltui';
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import './PageStrengthline.less';
+import logic from './logic';
 import { DDReady } from '../../app/ding';
 export default class PageStrengthline extends Component {
 
@@ -15,6 +16,7 @@ export default class PageStrengthline extends Component {
     //     alert('PageFinance did mount');
     //   }
     componentDidMount() {
+      this.dispatch('fetchTabItems');//获取权限的菜单的item;
       DDReady.then((dd) => {
   
         dd.biz.navigation.setTitle({
@@ -29,8 +31,8 @@ export default class PageStrengthline extends Component {
       });
     }
       constructor(props,context) {
-        super(props,context);
-        this.context.router;
+        super(props,logic);
+        // this.context.router;
         this.TabBarItems = [
           {
             title: '排行榜',
@@ -63,7 +65,11 @@ export default class PageStrengthline extends Component {
            badge: 2, path: '/more' },
         ];
         this.state = {
-          activeIndex:3}; 
+          activeIndex:3,
+          allItems:[],
+          defaultItems:[],
+          moreItems:[]
+        }; 
                   
       }
 
@@ -83,6 +89,7 @@ export default class PageStrengthline extends Component {
       //   t.showMask();
       // }
     };
+    const { defaultItems } = t.state;
     let option = {
       title : {
           text: '实力线'
@@ -135,7 +142,7 @@ export default class PageStrengthline extends Component {
                 onChange={onChange}
                 iconHeight={24}
                 cIconHeight={24}
-                items={this.TabBarItems}
+                items={t.state.defaultItems}
               />
       </div>
       </div>

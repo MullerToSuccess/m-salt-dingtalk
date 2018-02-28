@@ -33,7 +33,7 @@ if (isDev && window.chrome && window.chrome.webstore) { // This is a Chrome only
 FastClick.attach(document.body);
 
 // 这里使用 use 来配置 Refast
-// Refast 文档 https://recore.github.io/refast-docs/
+// Refast.use注册中间件：
 Refast.use('fn', {
   toast: Toast,
   dialog: Dialog,

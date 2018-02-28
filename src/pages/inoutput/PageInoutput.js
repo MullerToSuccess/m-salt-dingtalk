@@ -5,10 +5,12 @@ import {PasswordInput, TabBar, Table} from 'saltui';
 import echarts from 'echarts';
 import ReactEcharts from 'echarts-for-react';
 import './PageInoutput.less';
+import logic from './logic';
 import { DDReady } from '../../app/ding';
 export default class PageInoutput extends Component {
 
   componentDidMount() {
+    this.dispatch('fetchTabItems');//获取权限的菜单的item;
     DDReady.then((dd) => {
 
       dd.biz.navigation.setTitle({
@@ -23,8 +25,8 @@ export default class PageInoutput extends Component {
     });
   }
       constructor(props,context) {
-        super(props,context);
-        this.context.router;
+        super(props,logic);
+        // this.context.router;
         this.TabBarItems = [
           {
             title: '排行榜',
@@ -57,7 +59,11 @@ export default class PageInoutput extends Component {
            badge: 2, path: '/more' },
         ];
         this.state = {
-          activeIndex:2}; 
+          activeIndex:2,
+          allItems:[],
+          defaultItems:[],
+          moreItems:[]
+        }; 
                   
       }
 
@@ -78,6 +84,7 @@ export default class PageInoutput extends Component {
       //   t.showMask();
       // }
     };
+    const { defaultItems } = t.state;
     let option = {
       title : {
           text: '投入产出',
@@ -140,7 +147,7 @@ export default class PageInoutput extends Component {
                 onChange={onChange}
                 iconHeight={24}
                 cIconHeight={24}
-                items={this.TabBarItems}
+                items={t.state.defaultItems}
               />
       </div>
       </div>

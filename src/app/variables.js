@@ -12,6 +12,7 @@ export default {
   URLS: {},
   //这里放全局的配置文件的json配置：
   GLOBALS:{
+        isAuth:false,
         globalAccord:[{
           "name":"订单",
           "typeId":"1"

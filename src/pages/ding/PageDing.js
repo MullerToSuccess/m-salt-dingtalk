@@ -2,6 +2,7 @@ import { Component } from 'refast';
 import { DDReady } from '../../app/ding';
 import axios from 'axios';
 import logic from './logic';
+import {GLOBALS} from '../../app/variables';
 import './PageDing.less';
 import Button from 'saltui/lib/Button';
 import {PasswordInput, TabBar, Table, Calendar, Datetime, Popup, Slot} from 'saltui';
@@ -87,7 +88,8 @@ export default class PageDing extends Component {
 
   render() {
       const t =this;
-      const {moreItems,allItems} = t.state;
+      const {moreItems,allItems,defaultItems} = t.state;
+      // const { defaultItems } = t.state;
       DDReady.then((dd) => {
         dd.biz.navigation.setTitle({
           title: '更多',

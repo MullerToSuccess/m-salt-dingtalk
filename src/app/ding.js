@@ -4,7 +4,7 @@
 const getDingtalkConfig = async () => {
     // 此方法返回钉钉 JSAPI 所需要的配置。默认读取 window._config对象 可自行修改
     return {
-      agentId: window._config.agentId, // 必填，微应用ID
+      agentId: window._config.agentid, // 必填，微应用ID
       corpId: window._config.corpId, //必填，企业ID
       timeStamp: window._config.timeStamp, // 必填，生成签名的时间戳
       nonceStr: window._config.nonceStr, // 必填，生成签名的随机串
@@ -23,7 +23,9 @@ const getDingtalkConfig = async () => {
     'biz.ding.post',
     'biz.util.openLink',
     'biz.navigation.setTitle',
-    'biz.user.get'
+    'biz.user.get',
+    'biz.navigation.setRight',
+    'runtime.permission.requestAuthCode'
   ];
   const dd = window.dd;
   if (!dd) {
@@ -34,11 +36,11 @@ const getDingtalkConfig = async () => {
     getDingtalkConfig().then(data => {
       dd.config(data);
       dd.ready(function() {
-        resolve(dd);
+        resolve(dd);//解决函数
       });
       dd.error(function(err) {
         alert('dd error: ' + JSON.stringify(err));
-        reject(err);
+        reject(err);//拒绝函数
       });
     });
   });
