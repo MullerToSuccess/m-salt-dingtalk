@@ -9,24 +9,20 @@ import {PasswordInput, TabBar, Table, Calendar, Datetime, Popup, Slot} from 'sal
 
 export default class PageDing extends Component {
     componentDidMount() {
-      this.dispatch('fetchEchartOption');//获取echart
       this.dispatch('fetchTabItems');//获取权限的菜单的item;
-      
-        //axios并发请求：
-        // function getUserAccount() {
-        //   return axios.get('http://192.168.0.94:8080/dingtalk/dingding.json');
-        // }
-        
-        // function getUserPermissions() {
-        //   return axios.get('http://192.168.0.94:8080/dingtalk/dingding.json');
-        // }
-        
-        // axios.all([getUserAccount(), getUserPermissions()])
-        //   .then(axios.spread(function (acct, perms) {
-        //     // 两个请求现在都执行完成
-        //     alert('tttttttttt');
-        //   }));
       }
+
+    changeRoute(item){
+        // t.context.router.push(path);
+        console.log(11,item);
+        if(item.title == '投入产出' || item.title == '排行榜'
+           || item.title == '财务' || item.title == '更多'){
+            this.context.router.push(item.path);
+        }else{
+          alert('暂无模块');
+        }
+        
+    }
   constructor(props,context) {
     super(props, logic);
     //数据格式化：
@@ -43,49 +39,8 @@ export default class PageDing extends Component {
       defaultItems:[],
       moreItems:[]
     }; 
-    this.datetimeProps = {
-      locale: 'zh-cn',
-    }
-      window.dd && window.dd.ui.webViewBounce.disable();
+    this.changeRoute = this.changeRoute.bind(this);
   }
-  
-
-
- 
-  handleClickDemo(){
-    
-  }
-  handleClick(){
-        //修改状态：
-        alert(JSON.stringify(this.state));
-        // this.setState({
-        //   mclassify:'修改',
-        //   mcorp:'修改',
-        //   mdate:'修改',
-        // })
-        dd.runtime.permission.requestAuthCode({
-        corpId : window._config.corpId,
-        onSuccess : function(info) {
-            $.ajax({
-                url : 'userinfo?code=' + info.code + '&corpid='
-                        + _config.corpId,
-                type : 'GET',
-                success : function(data, status, xhr) {
-                    var info = JSON.parse(data);
-                    alert(JSON.stringify(info));
-                },
-                error : function(xhr, errorType, error) {
-                    logger.e("yinyien:" + _config.corpId);
-                    alert(errorType + ', ' + error);
-                }
-            });
-        },
-        onFail : function(err) {
-            alert('fail: ' + JSON.stringify(err));
-        }
-        });
-  }
-
   render() {
       const t =this;
       const {moreItems,allItems,defaultItems} = t.state;
@@ -106,31 +61,70 @@ export default class PageDing extends Component {
         console.log(t.context);
         // 这里是触发每个item之后的回调，会返回当前点击的item的index 值
         t.context.router.push(path);
-        
-      };
+      }; 
+  //     menuItems += item.isDefault ? (<div className='moreIcon' onClick={t.changeRoute.bind(this,item)}>
+  //     <img
+  //     src={item.activeIcon}>{item.title}</img>
+  //   </div>) : (<div className='moreIcon' onClick={t.changeRoute.bind(this,item)}>
+  //   <img
+  //   src={item.activeIcon}>{item.title}</img>
+  // </div>)
+    // let menuItems, defaultItems, notDefaultItems;
+    // console.log(132);
+    // allItems.map(((item, index) => (
+    //   <div className='moreIcon' onClick={t.changeRoute.bind(this,item)}>
+    //       <img
+    //        src={item.activeIcon}>{item.title}</img>
+    //      </div>
+    //     )
+    //   )
+    // )
 
+    
     return (
       <div className="page-demo">
-        <div>
+      <div className="set-title">
+        <span>常用设置</span>
+      </div>
+        <div className="set-content">
         {
-          allItems.map(((item, index) => (
-              <div className='moreIcon'>
-                <img
-                 src={item.activeIcon}>{item.title}</img>
-              </div>
+          defaultItems.map(((item, index) => (
+            <div className='moreIcon' onClick={t.changeRoute.bind(this,item)}>
+                <img className="set-image"
+                 src={item.moreIcon}></img>
+                 <div className="set-name">{item.title}</div>
+            </div>
               )
             )
           )
         } 
         </div>
+        <div className="set-gap"></div>
+        <div className="set-title">
+        <span>其他设置</span>
+        </div>
+        <div className="set-content">
+        {
+          moreItems.map(((item, index) => (
+            <div className='moreIcon' onClick={t.changeRoute.bind(this,item)}>
+            <img className="set-image"
+             src={item.moreIcon}></img>
+             <div className="set-name">{item.title}</div>
+        </div>
+              )
+            )
+          )
+        }
+        </div>
         <div>
-        <TabBar tabBarStyle={{}}
-                activeIndex={t.state.activeIndex}
-                onChange={onChange}
-                iconHeight={24}
-                cIconHeight={24}
-                items={t.state.defaultItems}
-              />
+        <TabBar
+          tabBarStyle={{}}
+          activeIndex={t.state.activeIndex}
+          onChange={onChange}
+          iconHeight={24}
+          cIconHeight={24}
+          items={t.state.defaultItems}
+        />
       </div>
   </div>
        

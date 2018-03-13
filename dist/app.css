@@ -35,18 +35,44 @@
   height: 200px;
 }
 .moreIcon {
-  width: 25% !important;
-  height: 88px !important;
+  width: 60px !important;
+  height: 70px !important;
   display: inline-block;
-  margin-left: 20px;
+  margin-left: 36px;
   text-align: center;
+}
+.set-title {
+  color: #333333;
+  font-size: 18px;
+  padding-left: 12px;
+  margin-top: 12px;
+}
+.set-image {
+  background: #dae1ea;
+  border: 1px;
+  border-radius: 10px;
+  margin-top: 16px;
+  width: 48px;
+  height: 48px;
+}
+.set-name {
+  margin-top: 8px;
+  font-size: 14px;
+  color: #333333 !important;
+}
+.set-gap {
+  height: 16px;
+  border-top: 1px solid #d9dbdf !important;
+}
+.set-content {
+  margin-bottom: 16px;
 }
 .page-home {
   display: block;
 }
 .page-graph {
-  height: 392px;
-  background: #83B0D7;
+  height: 400px;
+  background: -webkit-linear-gradient(left, #60EEEA, #6F8DFA);
   color: white;
   opacity: 40%;
 }
@@ -56,16 +82,18 @@
   color: white;
 }
 .page-button {
-  background: #A4B6C6 !important;
+  background: #8eb6da  !important;
   width: 23%;
   display: inline-block !important;
+  color: #fff !important;
 }
 .demo {
   margin-top: 25px;
 }
 .demo-popup-container-2 {
-  height: 20%;
+  height: 30%;
   width: 280px;
+  color: #fff;
 }
 .t-popup-slide-down {
   background-color: #83b0d7 !important;
@@ -75,7 +103,7 @@
 .page-pop-date,
 .page-pop-category {
   width: 100%;
-  background: #8E9EAC !important;
+  background: #E6EDF2 !important;
   padding: 24px;
   overflow: scroll;
 }
@@ -96,10 +124,10 @@
   margin-top: 10px !important;
 }
 .page-pop-title {
-  background: #8E9EAC !important;
   font-size: 16px;
-  color: #050606;
+  color: #999999;
   padding: 10px 20px;
+  background: #e6edf2 !important;
 }
 .myCalender {
   font-size: 12px !important;
@@ -114,10 +142,13 @@
   margin-right: 15px;
 }
 .pop-myPanel {
-  background: #8E9EAC !important;
+  background: #E6EDF2 !important;
 }
 .accordPop {
   height: 200px !important;
+}
+.t-table-header {
+  background: #E2EDF4;
 }
 .page-demo {
   color: #666;
@@ -128,8 +159,75 @@
 .page-chart {
   color: #666;
 }
+.page-graph {
+  height: 392px;
+  background: #83B0D7;
+  color: white;
+  opacity: 40%;
+}
 .page-chart {
   color: #666;
+}
+.page-graph {
+  height: 392px;
+  background: #83B0D7;
+  color: white;
+  opacity: 40%;
+}
+.t-popup-slide-down {
+  background-color: #83b0d7 !important;
+}
+.page-pop-classify,
+.page-pop-corp,
+.page-pop-date,
+.page-pop-category {
+  width: 100%;
+  background: #E6EDF2 !important;
+  padding: 24px;
+  overflow: scroll;
+}
+.page-pop-category,
+.page-pop-corp {
+  height: 160px;
+}
+.page-pop-classify {
+  height: 240px;
+}
+.page-pop-date {
+  height: 254px;
+}
+.page-btn-setFilter {
+  width: 80px !important;
+  display: inline-block !important;
+  margin-left: 15px !important;
+  margin-top: 10px !important;
+}
+.page-pop-title {
+  font-size: 16px;
+  color: #999999;
+  padding: 10px 20px;
+  background: #e6edf2 !important;
+}
+.myCalender {
+  font-size: 12px !important;
+}
+.page {
+  position: fixed;
+}
+.t-popup {
+  overflow: auto !important;
+}
+.btn-mode {
+  margin-right: 15px;
+}
+.pop-myPanel {
+  background: #E6EDF2 !important;
+}
+.accordPop {
+  height: 200px !important;
+}
+.t-table-header {
+  background: #E2EDF4;
 }
 .page-chart {
   color: #666;
@@ -138,4 +236,59 @@ a,abbr,acronym,address,applet,article,aside,audio,b,big,blockquote,body,canvas,c
   font-size: 14px;
   color: #333;
   background-color: #eee;
+}
+.t-button {
+  border-radius: 0px;
+}
+.hairline .t-button-secondary {
+  border: 0 solid rgba(142, 88, 55, 0.6) !important;
+}
+.t-button-secondary {
+  color: #333;
+  font-weight: bold;
+}
+.t-button-primary {
+  background: #ffffff;
+  color: #f37327;
+  font-weight: bold;
+}
+.page-graph {
+  background: -webkit-linear-gradient(left, #60EEEA, #6F8DFA) !important;
+}
+.hairline .t-table-row:nth-child(even) {
+  background: #F8FAFC !important;
+}
+.t-table-row {
+  height: 40px;
+  line-height: 39px;
+}
+.t-button-normal {
+  margin: 0 3%;
+}
+.timeZone {
+  font-size: 12px !important;
+  width: 36% !important;
+}
+.page-button {
+  background: #8eb6da  !important;
+  width: 23%;
+  display: inline-block !important;
+  color: #fff !important;
+}
+.page-table {
+  margin-bottom: 20px !important;
+}
+.t-tabs-bar {
+  height: 49px !important;
+  border-top: 1px solid #d9dbdf !important;
+}
+.t-tabs-bar-item.active {
+  color: #6ba6f6 !important;
+}
+.t-tabs-bar-item-label {
+  font-size: 10px;
+  line-height: 17px;
+}
+.t-tabs-bar-item-icon {
+  margin-top: 5px !important;
 }

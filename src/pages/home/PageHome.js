@@ -39,7 +39,7 @@ const moreItems = [];
 //defalut的popup的表单数据：
 const defaultPopup = {
   cate: "公司",
-  cateContent: "爱途享",
+  cateContent: "佳驰",
   startDate: "2017-12-08",
   endDate: "2017-12-09",
   maccord: "订单",
@@ -47,7 +47,10 @@ const defaultPopup = {
   quarter:'第一季度',
   month:1,
   companyId:1027,
-  type:'Ap_CloseBill'
+  type:'Ap_CloseBill',
+  branchCompany:'',
+  isAll:false,
+  timeZone:''
 };
 export default class PageHome extends Component {
   //组件加载后：
@@ -55,30 +58,40 @@ export default class PageHome extends Component {
   //2：调用钉钉api，获取所有的要用到钉钉的接口
   componentDidMount() {
     //接口：links/echarts/echarts!showEchartsDataByNameForMobile?vo.name=sales_data?company_id=1027 //指定参数限制
-    this.dispatch("fetchEchartOption", {"vo.id":10,"vo.type":1}); //获取echart
+    // this.dispatch("fetchEchartOption", {"vo.id":10,"vo.type":1,"branch_company_name":'佳驰'}); //获取echart
     this.dispatch("fetchTabItems", 10248); //获取权限的菜单的item;
     this.dispatch("fetchDataAccord");//获取order的类型
     this.dispatch("fetchDataCompany");//获取公司
     this.dispatch("fetchDataDepartment");//获取部门
+    // this.dispatch("fetchDataTable",{
+    //   startTime:1451692800000,
+    //   endTime:1459838886025
+    // });//获取表格中数据
     DDReady.then(dd => {
       const tt = this;
       //获取code:
-      dd.biz.navigation.setRight({
-        show: true, //控制按钮显示， true 显示， false 隐藏， 默认true
-        control: true, //是否控制点击事件，true 控制，false 不控制， 默认false
-        text: "过滤", //控制显示文本，空字符串表示显示默认文本
-        onSuccess: function(result) {
-          // tt.clickFetchOrganization;
-          tt.instance = Popup.show(tt.getContent(), {
-            animationType: "slide-left",
-            onMaskClose: function() {
-              //popup关闭后的回调：拿到所有的筛选的参数1：订单....；2：公司or部门..3：时间（long）
-              //然后通过接口查询this.dispatch();
-            }
-          });
+
+      dd.biz.navigation.setMenu({
+                items : [
+                    {
+                        "id":"1",
+                        "iconId":"file",
+                        "text":"过滤",
+                        "url": "/meris/pages/platform/images/icon_filter_mobile.png"
+                    }
+                ],
+                onSuccess: function(data) {
+           //点击过滤后
+                  tt.instance = Popup.show(tt.getContent(), {
+                    animationType: "slide-left",
+                    onMaskClose: function() {
+                      //popup关闭后的回调：拿到所有的筛选的参数1：订单....；2：公司or部门..3：时间（long）
+                      //然后通过接口查询this.dispatch();
+                    }
+                  });
         },
-        onFail: function(err) {}
-      });
+                onFail: function(err) {}
+            });
       if (!GLOBALS.isAuth) {
         //如果没有验证
         dd.runtime.permission.requestAuthCode({
@@ -86,15 +99,6 @@ export default class PageHome extends Component {
           onSuccess: function(result) {
             //异步请求登录：
             // alert('basePath: '+basePath);
-            alert( basePath +
-              "/dingtalk/user-info!" +
-              // 'loadUserInfo?code='+result.code+'&companyId='+dd.config.corpId)
-              "loadUserInfo?code=" +
-              result.code +
-              "&companyId=" +
-              companyId +
-              "&agentId=" +
-              agentId);
             axios
               .get(
                 basePath +
@@ -110,11 +114,11 @@ export default class PageHome extends Component {
               .then(res => {
                 let thisUser = res.data;
                 let tabItems;
-                alert(JSON.stringify(res.data));
+                // alert(JSON.stringify(res.data));
                 if (res.data.success) {
                   // this.dispatch("fetchTabItems", 10248);
                   //用户在平台验证登录后获取模块的权限等：
-                  alert("验证成功，欢迎" + thisUser.userId + "登录！");
+                  // alert("验证成功，欢迎" + thisUser.userId + "登录！");
                   tt.dispatch("fetchEchartOption");
                   tt.dispatch("fetchTabItems", thisUser.userId);
                   GLOBALS.isAuth = true;
@@ -131,7 +135,7 @@ export default class PageHome extends Component {
           }
         });
       } else {
-        alert('已经登录认证222222222');
+        // alert('已经登录认证222222222');
         tt.dispatch("fetchEchartOption");
         tt.dispatch("fetchTabItems");
       }
@@ -160,7 +164,7 @@ export default class PageHome extends Component {
       value: {
         startDate: "2016-01-02",
         startDateType: "AM",
-        endDate: "2016-01-03",
+        endDate: "2018-01-03",
         endDateType: "PM"
       },
       accord: [],
@@ -172,15 +176,18 @@ export default class PageHome extends Component {
       popOptions: {
         //筛选的选项
         cate: "公司",
-        cateContent: "爱途享",
-        startDate: "2017-12-08",
-        endDate: "2017-12-09",
+        cateContent: "选择公司",
+        startDate: "1451692800000",
+        endDate: "1520826553979",
         maccord: "订单",
         year:2017,
         quarter:'第一季度',
         month:1,
         companyId:1027,
-        type:'Ap_CloseBill'
+        type:'Ap_CloseBill',
+        branchCompany:'',
+        isAll:false,
+        timeZone:'2017.1-2017.12'
       },
       popClassCotent: "公司", //默认：公司List
       order: "订单",
@@ -198,77 +205,13 @@ export default class PageHome extends Component {
       moreItems: [],
       data: {
         data: [
-          {
-            email: "xw@abc.com",
-            nameId: "是不会变得说不出街道办事处比较说的ng",
-            name: "小王",
-            cityId: "bj",
-            city: "北京东路的日子无与伦比的美丽",
-            sex: "女"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          },
-          {
-            email: "xl@abc.com",
-            nameId: "xiaoli",
-            name: "小李",
-            cityId: "hz",
-            city: "杭州",
-            sex: "男"
-          }
         ]
       },
       columns: [
-        { dataKey: "city", title: "单位", align: "center" },
-        { dataKey: "name", title: "销售", align: "center" },
-        { dataKey: "email", title: "同比", align: "center" },
-        { dataKey: "email", title: "环比", align: "center" }
+        { dataKey: "branch_company_name", title: "单位", align: "center" },
+        { dataKey: "sale_money", title: "销售", align: "center" },
+        { dataKey: "lm", title: "同比", align: "center" },
+        { dataKey: "ly", title: "环比", align: "center" }
       ]
     };
     //绑定事件到组件：
@@ -282,6 +225,8 @@ export default class PageHome extends Component {
     this.clickSetContent = this.clickSetContent.bind(this);
     this.subReset = this.subReset.bind(this);
     this.subPop = this.subPop.bind(this);
+    this.clickFetchType = this.clickFetchType.bind(this);
+    this.timestampToTime = this.timestampToTime.bind(this);
     // this.onOk = this.onOk.bind(this);
   }
   //在接受props之前修改组件的state：
@@ -297,12 +242,78 @@ export default class PageHome extends Component {
   //       alert('option变了')
   //     }
   // }
+
+  //时间戳转时间
+  timestampToTime(timestamp) {
+    let date = new Date(timestamp);//时间戳为10位需*1000，时间戳为13位的话不需乘1000
+    let Y = date.getFullYear() + '.';
+    let M = (date.getMonth()+1 < 10 ? '0'+(date.getMonth()+1) : date.getMonth()+1);
+    return Y+M;
+}
   showMask() {
     this.setState({
       maskvisible: true
     });
   }
+  clickFetchType(item){
+    console.log(333);
+  //   this.dispatch('fetchDataFilter', 
+  //   {'vo.name':'sales_data',
+  //   // 'company_id':1027,
+  //   // 'year':2017,
+  //   'type':item.type,
+  //   'startTime':this.state.popOptions.startDate,
+  //   'endTime':this.state.popOptions.endDate
+  // });
+  // this.dispatch("fetchDataTable", {
+  //   'startTime':this.state.popOptions.startDate,
+  // 'endTime':this.state.popOptions.endDate,
+  // 'type':item.type
+  // });
 
+  //test:
+  if(!this.state.popOptions.isAll){
+    this.dispatch('fetchDataFilter', 
+        {'vo.name':'sales_data',
+        'branch_company_name':this.state.popOptions.branchCompany,
+        // 'year':2017,
+        'type':item.type,
+        'startTime':this.state.popOptions.startDate,
+        'endTime':this.state.popOptions.endDate
+      });
+      this.dispatch("fetchDataTable", {
+        'branch_company_name':this.state.popOptions.branchCompany,
+        'startTime':this.state.popOptions.startDate,
+        'type':item.type,
+      'endTime':this.state.popOptions.endDate});
+        Popup.hide();
+        console.log(this.state.option)
+  }else{
+    this.dispatch('fetchDataFilter', 
+        {'vo.name':'sales_data',
+        'startTime':this.state.popOptions.startDate,
+        'endTime':this.state.popOptions.endDate,
+        'type':item.type
+      });
+      this.dispatch("fetchDataTable", {
+        'startTime':this.state.popOptions.startDate,
+      'endTime':this.state.popOptions.endDate,
+      'type':item.type});
+        Popup.hide();
+        console.log(this.state.option)
+  }
+
+
+
+    Popup.hide();
+    this.setState(
+      Object.assign(this.state.popOptions, this.state.popOptions, {
+        type: item.type,
+        maccord: item.name
+      }),
+      console.log(this.state.popOptions)
+    );
+  }
   handleWillHide() {
     console.log("mask will hide");
     // 如果返回false 则Mask是不能关闭的
@@ -332,8 +343,6 @@ export default class PageHome extends Component {
   }
   //重置popup的表单提交
   subReset() {
-    //手动重新取一遍数据填到默认的值：
-
     // Popup.hide();
     this.setState(
       {
@@ -344,24 +353,42 @@ export default class PageHome extends Component {
   }
   //提交表单的查询的参数数据
   subPop(options) {
-    //获取更新后的source数组：
-    // this.setState({
-    //   activeIndex:2
-    // });
     alert(JSON.stringify(this.state.popOptions));
     //通过提交的条件获取新的数据：
     //过滤的参数：vo.name:查的表 + company_id:公司Id + year: 年份 + month  + quarter
     // + 订单类型：订单，收款，发票，发货
 
-    this.dispatch('fetchDataFilter', 
-    {'vo.name':'sales_data',
-    'company_id':1027,
-    // 'year':2017,
-    // 'type':this.state.popOptions.type,
-    'startTime':this.state.popOptions.startDate,
-    'endTime':this.state.popOptions.endDate
-  });
-    Popup.hide();
+    if(!this.state.popOptions.isAll){
+      this.dispatch('fetchDataFilter', 
+          {'vo.name':'sales_data',
+          'branch_company_name':this.state.popOptions.branchCompany,
+          // 'year':2017,
+          'type':this.state.popOptions.type,
+          'startTime':this.state.popOptions.startDate,
+          'endTime':this.state.popOptions.endDate
+        });
+        this.dispatch("fetchDataTable", {
+          'branch_company_name':this.state.popOptions.branchCompany,
+          'startTime':this.state.popOptions.startDate,
+          'type':this.state.popOptions.type,
+        'endTime':this.state.popOptions.endDate});
+          Popup.hide();
+          console.log(this.state.option)
+    }else{
+      this.dispatch('fetchDataFilter', 
+          {'vo.name':'sales_data',
+          'startTime':this.state.popOptions.startDate,
+          'endTime':this.state.popOptions.endDate,
+          'type':this.state.popOptions.type
+        });
+        this.dispatch("fetchDataTable", {
+          'startTime':this.state.popOptions.startDate,
+        'endTime':this.state.popOptions.endDate,
+        'type':this.state.popOptions.type});
+          Popup.hide();
+          console.log(this.state.option)
+    }
+    
   }
   clickFetchAccord() {
     //请求getAccord接口：
@@ -375,10 +402,9 @@ export default class PageHome extends Component {
           <div className="t-LH44 t-FBH t-FBAC">
             <div
               className="t-FB1 t-PL10"
-              onclick={this.clickSetAccord.bind(this, item.name)}
+              onClick={this.clickFetchType.bind(this, item)}
             >
-              {item.name}
-              {item.type ? `(${item.type})` : ""}
+            {item.name}
             </div>
           </div>
         ))}
@@ -389,6 +415,7 @@ export default class PageHome extends Component {
     );
   }
   //popup筛选条件中设置的点击事件
+  
 
   //1：为每一个popUp里面的btn都设置改变组件中state的属性的方法:
   clickSetAccord(args) {
@@ -415,20 +442,39 @@ export default class PageHome extends Component {
   }
   //2：设置具体的公司或者客户名：
   clickSetContent(args) {
-    this.setState(
-      Object.assign(this.state.popOptions, this.state.popOptions, {
-        cateContent: args.name,
-        companyId:1027
-      }),
-      console.log(this.state.popOptions)
-    );
-    this.setState(
-      {
-        cateContentIndex: args.index,
-        cateContent: args.name //具体的某个公司或者客户名等
-      },
-      () => this.instance.update(this.getContent())
-    );
+    if(!args.isAll){
+      this.setState(
+        Object.assign(this.state.popOptions, this.state.popOptions, {
+          cateContent: args.name,
+          companyId:1027,
+          branchCompany:args.name,
+          isAll:false
+        }),
+        console.log(this.state.popOptions)
+      );
+      this.setState(
+        {
+          cateContentIndex: args.index,
+          cateContent: args.name //具体的某个公司或者客户名等
+        },
+        () => this.instance.update(this.getContent())
+      );
+    }else{
+      this.setState(
+        Object.assign(this.state.popOptions, this.state.popOptions, {
+          isAll:true,
+          cateContent: '全部'+this.state.popOptions.cate 
+        }),
+        console.log(this.state.popOptions)
+      );
+      this.setState(
+        {
+          cateContentIndex: -1
+        },
+        () => this.instance.update(this.getContent())
+      );
+    }
+    
   }
   //3：设置依据：订单，发票；
   clickSetOrganization(args) {
@@ -468,7 +514,7 @@ export default class PageHome extends Component {
       readOnly: false,
       // animationType: 'slideLeft',
       onOk: this.onOk.bind(this), //选择确定后的触发事件
-      showTopPanel: true
+      showTopPanel: true,
       // formatter: 'yyyy.MM.dd',
     };
 
@@ -570,13 +616,25 @@ export default class PageHome extends Component {
           </Panel>
           <Panel key="p-content" header={myHeader2} className="pop-myPanel">
             <div className="page-pop-corp">
+              <Button className="page-btn-setFilter"
+              onClick={this.clickSetContent.bind(this, {
+                isAll:true,
+                index:-1
+              })}
+              type={
+                this.state.cateContentIndex == -1
+                  ? "primary"
+                  : "secondary"
+              }
+              >全部</Button>
               {contentList.map((item, index) => (
                 <Button
                   className="page-btn-setFilter"
                   onClick={this.clickSetContent.bind(this, {
                     name: item.branch_company_name || item.c_dep_full_name,
                     id: item.company_id || item.c_dep_code,
-                    index: index
+                    index: index,
+                    isAll:false
                   })}
                   type={
                     this.state.cateContentIndex == index
@@ -699,7 +757,8 @@ export default class PageHome extends Component {
     this.setState(
       Object.assign(this.state.popOptions, this.state.popOptions, {
         startDate: value.startDate,
-        endDate: value.endDate
+        endDate: value.endDate,
+        timeZone: this.timestampToTime(value.startDate) + '-' + this.timestampToTime(value.endDate)
       }),
       console.log(this.state.popOptions)
     );
@@ -718,7 +777,7 @@ export default class PageHome extends Component {
     };
     // const { option = [], error } = t.state;
     // const Tag = option ? mEchart : Info;
-    const { option, defaultItems } = t.state; //用到组件中的在state中取过来
+    const { option, defaultItems, data } = t.state; //用到组件中的在state中取过来
     return (
       <div className="page-home">
         <Mask
@@ -742,8 +801,8 @@ export default class PageHome extends Component {
             >
               {this.state.popOptions.cateContent}
             </Button>
-            <Button className="page-button" onClick={t.handleClick}>
-              {this.state.popOptions.startDate}
+            <Button className="page-button timeZone" onClick={t.handleClick}>
+              {this.state.popOptions.timeZone}
             </Button>
             <div className="demo" />
           </div>
@@ -757,8 +816,7 @@ export default class PageHome extends Component {
             onChartReady={this.onChartReadyCallback}
           />
         </div>
-
-        <div>
+        <div className="page-table">
           <Table columns={t.state.columns} data={t.state.data} leftFixed={0} />
         </div>
         <div>

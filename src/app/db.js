@@ -88,6 +88,17 @@ context.create("Option", {
       });
     }
   },
+  getEchartOptionByName: {
+    mockUrl: "query/echartOption.json",
+    // url: "meris/pages/platform/mock/echartOption.text",
+    url: "links/echarts/echarts!showEchartsDataByName",
+    willFetch() {
+      Toast.show({
+        type: "loading",
+        content: "Loading"
+      });
+    }
+  },
   getTabItems: {
     mockUrl: "query/tabItems.json",
     url: "meris/platform/platform!mobileLoadMenuItems",
@@ -119,6 +130,21 @@ context.create("Data", {
     data: {
       "vo.name": "sales_data",
       "vo.efdsName":"type"
+    },
+    willFetch() {
+      Toast.show({
+        type: "loading",
+        content: "Loading"
+      });
+    }
+  },
+  //获取财务类型：
+  getAccordFinance: {
+    mockUrl: "query/accord.json",
+    url: "links/echarts/echarts!getFiltersDataByEDSAndEFDS",
+    data: {
+      "vo.name": "gl_accsum",
+      "vo.efdsName":"name"
     },
     willFetch() {
       Toast.show({
@@ -182,6 +208,51 @@ context.create("Data", {
         content: "Loading"
       });
     }
-  }
+  },
+  //获取表格table中的数据：销售排行
+  getTableSalesIn: {
+    mockUrl: "query/accord.json",
+    url: "links/echarts/echarts!getFiltersDataByEDSAndEFDS",
+    data: {
+      "vo.name": "sales_data",
+      "vo.efdsName":"@table"
+    },
+    willFetch() {
+      Toast.show({
+        type: "loading",
+        content: "Loading"
+      });
+    }
+  },
+  //获取表格table中的数据：财务报表
+  getTableFinance: {
+    mockUrl: "query/accord.json",
+    url: "links/echarts/echarts!getFiltersDataByEDSAndEFDS",
+    data: {
+      "vo.name": "gl_accsum",
+      "vo.efdsName":"@table"
+    },
+    willFetch() {
+      Toast.show({
+        type: "loading",
+        content: "Loading"
+      });
+    }
+  },
+  //获取表格table中的数据：投入产出
+  getTableInputOutput: {
+    mockUrl: "query/accord.json",
+    url: "links/echarts/echarts!getFiltersDataByEDSAndEFDS",
+    data: {
+      "vo.name": "input_output",
+      "vo.efdsName":"@table"
+    },
+    willFetch() {
+      Toast.show({
+        type: "loading",
+        content: "Loading"
+      });
+    }
+  },
 });
 export default context.api; //输出上下文的所有接口

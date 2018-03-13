@@ -9,29 +9,39 @@ export default {
   },
   async fetchEchartOption({ fn, setState }, echartType) {
     const { dataset } = await fn.DB.Option.getEchartOption(echartType);
-    console.log(4545454545);
+    console.log(666,dataset.source[0]);
+    let seriesLen = dataset.source[0].length - 1;
+    let thisSeries = [];
+    for(let i=0; i<seriesLen; i++){
+      console.log('iiiiiiii');
+      thisSeries.push({
+        type: "bar",
+        markPoint : {
+          data : [
+            {type : 'max', name: '最大'},    // 最大值
+            {type : 'min', name: '最小'}
+          ]
+        },
+      })
+    }
+    console.log(thisSeries);
     const option = {
       legend: {},
       tooltip: {},
       dataset,
       yAxis: {
         type: "category",
-        axisLabel: {
-          interval: 0
-        }
       },
-      xAxis: {},
-      series: [
-        {
-          type: "bar"
-        },
-        {
-          type: "bar"
-        },
-        {
-          type: "bar"
-        }
-      ]
+      xAxis: {
+        axisLabel: {  
+          interval:1,
+          rotate:45
+       }  
+      },
+      grid:{
+        x:60
+      },
+      series: thisSeries
     };
     console.log(454545, option);
     setState({
@@ -76,6 +86,20 @@ export default {
   //定义格式：所有异步获取的均为res.message:
   async fetchDataFilter({ fn, setState }, filters) {
     const { dataset } = await fn.DB.Data.getFilterEchart(filters);
+    let seriesLen = dataset.source[0].length - 1;
+    let thisSeries = [];
+    for(let i=0; i<seriesLen; i++){
+      console.log('iiiiiiii');
+      thisSeries.push({
+        type: "bar",
+        markPoint : {
+          data : [
+            {type : 'max', name: '最大'},    // 最大值
+            {type : 'min', name: '最小'}
+          ]
+        },
+      })
+    }
     const option = {
       legend: {},
       tooltip: {},
@@ -86,19 +110,38 @@ export default {
           interval: 0
         }
       },
-      xAxis: {},
-      series: [
-        {
-          type: "bar"
-        },
-        {
-          type: "bar"
+      toolbox: {
+        show: true,
+        feature: {
+            magicType: {type: ['line', 'bar']},
         }
-      ]
+      },
+      xAxis: {},
+      series: thisSeries
     };
     console.log(666666, option);
     setState({
       option
+    });
+  },
+  async fetchDataTable({ fn, setState }, filters) {
+    const _thisData = await fn.DB.Data.getTableSalesIn(filters);
+    let thisData = [];
+    if(_thisData.length>0){
+      _thisData.forEach(function(item){
+        thisData.push({
+          "lm": item.lm || 0, 
+          "branch_company_name": item.branch_company_name, 
+          "sale_money": item.sale_money, 
+          "ly": item.ly || 0
+        });
+      })
+    }
+    const data = {
+      data:thisData
+    }
+    setState({
+      data
     });
   },
   async fetchDataAccord({ fn, setState }) {

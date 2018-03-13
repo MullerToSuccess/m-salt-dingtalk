@@ -34,6 +34,7 @@ const getDingtalkConfig = async () => {
   
   export const DDReady = new Promise((resolve, reject) => {
     getDingtalkConfig().then(data => {
+      alert(JSON.stringify(data));
       dd.config(data);
       dd.ready(function() {
         resolve(dd);//解决函数
